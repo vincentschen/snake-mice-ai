@@ -7,7 +7,7 @@ import random
 
 from pygame.locals import *
 
-FPS = 15
+FPS = 80
 pygame.init()
 fpsClock = pygame.time.Clock()
 
@@ -37,6 +37,9 @@ def manhattan_distance(pos1, pos2):
     dy = pos1[1] - pos2[1]
     return abs(dx) + abs(dy)
 
+def valid_position(pos):
+    return not (pos[0] < 0 or pos[0] > (GRID_WIDTH - 1) * GRIDSIZE or pos[1] < 0 or pos[1] > (GRID_HEIGHT - 1) * GRIDSIZE)
+
 class Snake(object):
     def __init__(self):
         self.lose()
@@ -48,7 +51,7 @@ class Snake(object):
 
     def lose(self):
         self.length = 1
-        self.mice_eaten = 0
+        #self.mice_eaten = 0
         self.positions =  [((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))]
         self.direction = random.choice([UP, DOWN, LEFT, RIGHT])
 
@@ -64,21 +67,24 @@ class Snake(object):
     def move(self):
         cur = self.positions[0]
         x, y = self.direction
-        new = (((cur[0] + (x * GRIDSIZE)) % SCREEN_WIDTH), \
-                (cur[1] + (y * GRIDSIZE)) % SCREEN_HEIGHT)
-        if len(self.positions) > 2 and new in self.positions[2:]:
+        new = (((cur[0] + (x * GRIDSIZE))), \
+                (cur[1] + (y * GRIDSIZE)))
+        if (len(self.positions) > 2 and new in self.positions[2:]) or \
+            (not valid_position(new)):
             self.lose()
+            return 1
         else:
             self.positions.insert(0, new)
             if len(self.positions) > self.length:
                 self.positions.pop()
+        return 0
     
     def draw(self, surf):
         for p in self.positions:
             draw_box(surf, self.color, p)
 
 class Mouse(object):
-    def __init__(self, reward = 3):
+    def __init__(self, reward = 1):
         self.color = (255, 255, 255)
         self.position = (0, 0)
         self.randomize()
@@ -92,8 +98,11 @@ class Mouse(object):
         if rand:
             cur = self.position
             x, y = random.choice([UP, DOWN, LEFT, RIGHT])
-            self.position = (((cur[0] + (x * GRIDSIZE)) % SCREEN_WIDTH), \
-                              (cur[1] + (y * GRIDSIZE)) % SCREEN_HEIGHT)
+            new = (((cur[0] + (x * GRIDSIZE))), (cur[1] + (y * GRIDSIZE)))
+            while not valid_position(new):
+                x, y = random.choice([UP, DOWN, LEFT, RIGHT])
+                new = (((cur[0] + (x * GRIDSIZE))), (cur[1] + (y * GRIDSIZE)))
+            self.position = new    
         else:
             # TODO: Provide alternative to random movement
             pass
@@ -104,14 +113,30 @@ class Mouse(object):
 class Game(object):
     def __init__(self, mice_count = 5):
         self.snake = Snake()
-        self.mice = []
-        for i in range(mice_count):
-            self.mice.append(Mouse()) 
-        self.move_parity = 0
+        self.mice = [Mouse() for i in range(mice_count)]
+        self.iters = 0
+        self.ticks = 0
+        self.results = {}
+        self.time = 0
         self.lose()
 
     def lose(self):
-        self.snake.lose()
+        self.move_parity = 0
+        if self.iters:
+            self.results[self.iters] = (float(self.time) / self.ticks, self.snake.mice_eaten)
+            self.time = 0
+            self.ticks = 0
+            if self.iters > 50:
+                overall_avg_time = 0
+                overall_mice = 0
+                for pair in self.results:
+                    overall_avg_time += self.results[pair][0]
+                    overall_mice += self.results[pair][1]
+                print overall_avg_time / self.iters
+                print float(overall_mice) / self.iters 
+        self.iters += 1    
+        self.snake.mice_eaten = 0
+        print self.iters
 
     def check_eat(self, snake, mouse):
         if snake.get_head_position() == mouse.position:
@@ -121,6 +146,7 @@ class Game(object):
             snake.mice_eaten += 1
 
     def orient_snake(self):
+        start = time.time()
         if self.snake.cur_target == None:
             closest_mouse = min(self.mice, key=lambda mouse: \
                                 manhattan_distance(mouse.position, self.snake.get_head_position())) 
@@ -159,11 +185,15 @@ class Game(object):
                     direction = DOWN if self.snake.direction != UP else RIGHT
                 else:
                     direction = RIGHT if self.snake.direction != LEFT else DOWN
+        end = time.time()
+        total_time = end - start
+        self.time += total_time
         self.snake.point(direction)
 
     def tick(self):
         self.orient_snake()
-        self.snake.move()
+        if self.snake.move():
+            self.lose()
         for mouse in self.mice:
             if self.move_parity:
                 mouse.move()
@@ -173,7 +203,7 @@ class Game(object):
             self.check_eat(self.snake, mouse)
             self.snake.draw(surface)
             mouse.draw(surface)
-        
+        self.ticks += 1 
 
 if __name__ == '__main__':
     game = Game()
