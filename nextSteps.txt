@@ -1,0 +1,75 @@
+snake.py 
+	def runGames ( #layout, snake, mice, #display, numGames)
+  	# calculates overall stats: the average score, win rate, etc. 
+    # calls GameController.NewGame
+    
+	class GameController: #AKA ClassicGameRules in pacman.py
+    newGame ()
+    	initializes GameState() 	
+    	initializes Game()
+    
+    process () # checks to see if game is over
+    win ()
+    lose ()
+    getProgress () # for showing score? 
+		
+  	# other things related to total time? etc. etc. 
+    
+	class GameState: # initializes game state and holds info accessible by Game
+    # functions split for agent type
+    
+    getLegalActions() 
+    generateSuccessor()
+    	# generates current GameState() 
+    	# checks current agent
+    	# ticks (update score)
+    	# 
+    getState() / getStates()
+    getPosition() / getPositions()
+    hasFood()
+    isLose()
+    isWin()
+    
+game.py
+  class Game: # manages control flow 
+		getProgress() 
+    agentCrash() #? do we need this 
+    run()
+    	for every agent
+    		agent.registerInitialState(state)
+    
+    	while game not over: # one agent per loop - line 581 game.py
+    		# choose action for agent
+    		# generate successor for agent i.e. execute action
+    		# updating display
+    		# controller processing state (rules in original) - line 672 game.py
+    		# increment or roll over on agents
+    
+snakeAgent.py 
+  oracle
+  basline
+  keyboard 
+  different models/heuristics 
+
+    
+Implementation Order: 
+    SnakeRules
+    MiceRules
+    GameState
+    GameController
+    Game
+    	runGame
+    SnakeAgents
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
