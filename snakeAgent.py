@@ -71,6 +71,7 @@ class GameState:
     self.dimensions = dimensions
     self.score = 0
     self.miceEaten = 0
+    self.numMice = numMice
     
     randomLocations = set()
     while len(randomLocations) < numMice + 1:
@@ -92,8 +93,14 @@ class GameState:
     # Check that successors exist
     if self.won() or self.lost(): 
       raise Exception('Can\'t generate a successor of a terminal state.')
+    
     # Copy current state
-    state = GameState(self)
+    state = GameState(self.dimensions, self.numMice)
+    state.score = self.score
+    state.miceEaten = self.miceEaten
+    state.micePositions = deepcopy(self.micePositions)
+    state.snakePositions = deepcopy(self.snakePositions)
+
     # Let agent's logic deal with its action's effects on the board
     if agentIndex == 0:  # Snake is moving
       snakeRules.applyAction(state, action) #TODO: implement snakeRules
