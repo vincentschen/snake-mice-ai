@@ -152,8 +152,8 @@ class GameState:
     self.dimensions = dimensions
     self.score = 0
     self.miceEaten = 0
-    self.snakePositions = [MouseRules.randomLocation(self)]
-    self.micePositions = [MouseRules.randomLocation(self) for i in range(numMice)]
+    self.snakePositions = [MouseRules.randomLocation(dimensions)]
+    self.micePositions = [MouseRules.randomLocation(dimensions) for i in range(numMice)]
 
   def getLegalActions(self, agentIndex = 0):
     #if it's over-no legal action
@@ -239,7 +239,7 @@ class Game:
       agentIndex = (agentIndex + 1) % len(self.agents)
       
 def runGames (dimensions, numMice, numGames):
-  agents = [SnakeAgent()] + [MouseAgents(i) for i in range(1, numMice + 1)]
+  agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
   for i in range(numGames):
