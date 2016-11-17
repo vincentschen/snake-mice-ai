@@ -3,6 +3,7 @@ import mouseRules #TODO
 """
 Handles state changes for snake agent
 """
+MOVE_PENALTY = 1
 
 def getLegalActions(state):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -26,7 +27,7 @@ def isValidLocation(state, location):
 def applyAction(state, action):
     newLoc = (state.getSnakePositions()[0][0] + action[0], state.getSnakePositions()[0][1] + action[1])
     # itself or a wall, game over
-    if not isValidLocation(newLoc):
+    if not isValidLocation(state, newLoc):
       state.isLose = True
     # new tile has a mouse
     elif newLoc in state.getMicePositions():
