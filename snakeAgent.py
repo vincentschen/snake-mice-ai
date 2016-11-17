@@ -164,7 +164,7 @@ class Game:
       action = agent.getAction(observedState)
       self.state = self.state.generateSuccessor(agentIndex, action)
       self.state.displayGame()
-      self.rules.process()
+      self.rules.process(self.state, self)
       if agentIndex == len(self.agents) + 1:
         self.numSteps += 1
       agentIndex = (agentIndex + 1) % len(self.agents)
