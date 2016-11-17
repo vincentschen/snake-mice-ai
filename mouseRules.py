@@ -2,6 +2,10 @@
 Handles state changes for mice agents
 """
 
+MOVE_PENALTY = 1
+MOUSE_REWARD = 20
+MICE_TO_WIN = 50
+
 def getLegalActions(state, agentIndex):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     results = []

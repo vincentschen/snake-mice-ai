@@ -2,10 +2,6 @@ import random
 import subprocess
 from copy import deepcopy
 import snakeRules, mouseRules 
-
-MOVE_PENALTY = 1
-MOUSE_REWARD = 20
-MICE_TO_WIN = 50
   
 class GameRules: 
   """
