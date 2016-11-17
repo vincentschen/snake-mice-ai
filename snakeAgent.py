@@ -57,7 +57,7 @@ class MouseAgent:
     self.agentIndex = agentIndex
   
   def getAction(self, state):
-    legalActions = state.getLegalActions(agentIndex)
+    legalActions = state.getLegalActions(self.agentIndex)
     return random.choice(legalActions)
 
 class GameState: 

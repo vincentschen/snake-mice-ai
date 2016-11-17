@@ -16,7 +16,12 @@ def getLegalActions(state, agentIndex):
     return results
 
 def applyAction(state, action, agentIndex):
-    newLoc = (state.micePositions[agentIndex-1] + action[0], state.micePositions[agentIndex-1] + action[1])
+    
+    previousMouseLocation = state.micePositions[agentIndex-1]
+    previousMouseX = previousMouseLocation[0]
+    previousMouseY = previousMouseLocation[1]
+    
+    newLoc = (previousMouseX + action[0], previousMouseY + action[1])
     state.micePositions[agentIndex-1] = newLoc
 
 #valid location is any square in the grid without a mouse or snake tile
