@@ -49,7 +49,7 @@ class SnakeAgent:
       if distanceToMouse[i] < distanceToMouse[closestIndex]:
         closestIndex = i
     newSnakeHeadLoc = (state.snakePositions[0][0] + action[0], state.snakePositions[0][1] + action[1])
-    return manhattanDistance(state.micePositions[closestIndex], newSnakeHeadLoc)
+    return -1*manhattanDistance(state.micePositions[closestIndex], newSnakeHeadLoc)
 
 class MouseAgent:
   
