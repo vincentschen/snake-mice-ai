@@ -17,9 +17,9 @@ class GameRules:
     return game
 
   def process(self, state, game):
-    if state.isWin():
+    if state.won():
       self.win(state, game)
-    if state.isLose():
+    if state.lost():
       self.lose(state, game)
 
   def win(self, state, game):
@@ -35,7 +35,7 @@ class SnakeRules:
   Handles state changes for snake agent
   """
   
-  def getLegalActions(state):
+  def getLegalActions(self, state):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     results = []
     agentPos = state.getSnakePositions[0]
@@ -46,7 +46,7 @@ class SnakeRules:
 
   # valid location is any square in the grid, 
   # even if there's a mouse or snake tile there
-  def isValidLocation(state, location):
+  def isValidLocation(self, state, location):
     if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
       return False
     for loc in [state.getSnakePositions()]:
@@ -54,7 +54,7 @@ class SnakeRules:
         return False
     return True
 
-  def applyAction(state, action):
+  def applyAction(self, state, action):
     newLoc = (state.getSnakePositions()[0][0] + action[0], state.getSnakePositions()[0][1] + action[1])
     # itself or a wall, game over
     if not isValidLocation(newLoc):
@@ -79,7 +79,7 @@ class MouseRules:
   Handles state changes for mice agents
   """
   
-  def getLegalActions(state, agentIndex):
+  def getLegalActions(self, state, agentIndex):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
     results = []
     agentPos = state.getMicePositions()[agentIndex-1]
@@ -88,12 +88,12 @@ class MouseRules:
         results.append(move)
     return results
 
-  def applyAction(state, action, agentIndex):
+  def applyAction(self, state, action, agentIndex):
     newLoc = (state.micePositions[agentIndex-1] + action[0], state.micePositions[agentIndex-1] + action[1])
     state.micePositions[agentIndex-1] = newLoc
 
   #valid location is any square in the grid without a mouse or snake tile
-  def isValidLocation(state, location):
+  def isValidLocation(self, state, location):
     if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
       return False
     for loc in [state.getSnakePositions() + state.getMicePositions()]:
@@ -102,7 +102,7 @@ class MouseRules:
     return True
 
   #returns a random location on the board not taken up by snake or mice
-  def randomLocation(state):
+  def randomLocation(self, state):
     while True:
       possible = (random.randint(0, state.dimensions[0] - 1), random.randint(0, state.dimensions[1] - 1))
       if isValidLocation(possible):
@@ -117,7 +117,7 @@ class SnakeAgent:
     return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
   
   def getAction(self, state):
-    legalActions = state.getLegalActions(agentIndex)
+    legalActions = state.getLegalActions(self.agentIndex)
     scores = [self.evaluationFunction(state, action) for action in legalActions]
     bestScore = max(scores)
     bestIndices = [i for i, action in enumerate(scores) if scores[i] == bestScore]
@@ -159,19 +159,19 @@ class GameState:
 
     self.snakePositions = [randomLocations.pop()]
     self.micePositions = list(set(randomLocations))
-
+  
   def getLegalActions(self, agentIndex = 0):
     #if it's over-no legal action
-    if self.isWin() or self.isLose(): 
+    if self.won() or self.lost(): 
       return []
     if agentIndex == 0:  # Pacman is moving
-      return SnakeRules.getLegalActions(self) #TODO: IMPLEMENT LEGAL ACTIONS FUNCTIONS 
+      return SnakeRules.getLegalActions(self)
     else:
-      return MouseRules.getLegalActions(self, agentIndex) #TODO: IMPLEMENT LEGAL ACTIONS FUNCTIONS 
+      return MouseRules.getLegalActions(self, agentIndex)
   
   def generateSuccessor(self, agentIndex, action):
     # Check that successors exist
-    if self.isWin() or self.isLose(): 
+    if self.won() or self.lost(): 
       raise Exception('Can\'t generate a successor of a terminal state.')
     # Copy current state
     state = GameState(self)
@@ -194,14 +194,14 @@ class GameState:
   def getScore(self):
     return self.score
 
-  def isLose(self):
+  def lost(self):
     return self.isLose
 
-  def isWin(self):
+  def won(self):
     return self.isWin
 
   def displayGame(self):
-    process = subprocess.Popen("clear")
+#    process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
     grid = [["[ ]" for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
@@ -216,7 +216,7 @@ class GameState:
             screen += grid[row][col]
         screen += "\n"
     print screen
-    print "Score: %d" % score
+    print "Score: %d" % self.getScore()
 
 class Game:
   """
@@ -234,7 +234,7 @@ class Game:
     agentIndex = 0
     while not self.gameOver:
       agent = self.agents[agentIndex]
-      observedState = self.state.deepcopy()
+      observedState = deepcopy(self.state)
       action = agent.getAction(observedState)
       self.state = self.state.generateSuccessor(agentIndex, action)
       self.state.displayGame()
@@ -254,7 +254,7 @@ def runGames (dimensions, numMice, numGames):
   
   #pacman scoring
   scores = [game.state.getScore() for game in games]
-  wins = [game.state.isWin() for game in games]
+  wins = [game.state.won() for game in games]
   winRate = wins.count(True) / float(len(wins))
   print 'Average Score:', sum(scores) / float(len(scores))
   print 'Scores:       ', ', '.join([str(score) for score in scores])
