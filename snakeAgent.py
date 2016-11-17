@@ -1,5 +1,6 @@
 import random
 import subprocess
+import time
 from copy import deepcopy
 import snakeRules, mouseRules 
   
@@ -84,7 +85,7 @@ class GameState:
     #if it's over-no legal action
     if self.won() or self.lost(): 
       return []
-    if agentIndex == 0:  # Pacman is moving
+    if agentIndex == 0:
       return snakeRules.getLegalActions(self)
     else:
       return mouseRules.getLegalActions(self, agentIndex)
@@ -127,7 +128,7 @@ class GameState:
     return self.isWin
 
   def displayGame(self):
-#    process = subprocess.Popen("clear")
+    # process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
     grid = [["[ ]" for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
@@ -167,7 +168,8 @@ class Game:
       self.rules.process(self.state, self)
       if agentIndex == len(self.agents) + 1:
         self.numSteps += 1
-      agentIndex = (agentIndex + 1) % len(self.agents)
+      agentIndex = (agentIndex + 1 if self.numSteps % 2 == 0 else agentIndex) % len(self.agents)
+      time.sleep(.05)
       
 def runGames (dimensions, numMice, numGames):
   agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]

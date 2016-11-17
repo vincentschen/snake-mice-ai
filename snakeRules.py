@@ -19,7 +19,7 @@ def getLegalActions(state):
 def isValidLocation(state, location):
     if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
       return False
-    for loc in [state.getSnakePositions()]:
+    for loc in state.getSnakePositions():
       if loc == location:
         return False
     return True
@@ -34,12 +34,12 @@ def applyAction(state, action):
       eatenMouseIndex = state.getMicePositions().index(newLoc)
       state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
       state.snakePositions.insert(0, newLoc)
-      state.score += MOUSE_REWARD
+      state.score += mouseRules.MOUSE_REWARD
       state.miceEaten += 1
-      if state.miceEaten >= MICE_TO_WIN:
+      if state.miceEaten >= mouseRules.MICE_TO_WIN:
         state.isWin = True
     #new tile is empty
     else:   
       state.snakePositions.insert(0, newLoc)
       state.snakePositions.pop()
-      state.score -= MOVE_PENALTY 
+      state.score -= mouseRules.MOVE_PENALTY 
