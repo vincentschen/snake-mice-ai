@@ -1,3 +1,5 @@
+import mouseRules #TODO
+
 """
 Handles state changes for snake agent
 """
@@ -29,7 +31,7 @@ def applyAction(state, action):
     # new tile has a mouse
     elif newLoc in state.getMicePositions():
       eatenMouseIndex = state.getMicePositions().index(newLoc)
-      state.micePositions[eatenMouseIndex] = MouseRules.randomLocation(state)
+      state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
       state.snakePositions.insert(0, newLoc)
       state.score += MOUSE_REWARD
       state.miceEaten += 1
