@@ -1,6 +1,7 @@
 import random
 import subprocess
 from copy import deepcopy
+import snakeRules, mouseRules 
 
 MOVE_PENALTY = 1
 MOUSE_REWARD = 20
@@ -29,84 +30,6 @@ class GameRules:
   def lose(self, state, game):
     print "Lose (Score = %d" % state.score
     game.gameOver = True
-
-class SnakeRules:
-  """
-  Handles state changes for snake agent
-  """
-  
-  def getLegalActions(self, state):
-    possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    results = []
-    agentPos = state.getSnakePositions[0]
-    for move in possible_results:
-      if isValidLocation(state, (agentPos[0] + move[0], agentPos[1] + move[1])):
-        results.append(move)
-    return results
-
-  # valid location is any square in the grid, 
-  # even if there's a mouse or snake tile there
-  def isValidLocation(self, state, location):
-    if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
-      return False
-    for loc in [state.getSnakePositions()]:
-      if loc == location:
-        return False
-    return True
-
-  def applyAction(self, state, action):
-    newLoc = (state.getSnakePositions()[0][0] + action[0], state.getSnakePositions()[0][1] + action[1])
-    # itself or a wall, game over
-    if not isValidLocation(newLoc):
-      state.isLose = True
-    # new tile has a mouse
-    elif newLoc in state.getMicePositions():
-      eatenMouseIndex = state.getMicePositions().index(newLoc)
-      state.micePositions[eatenMouseIndex] = MouseRules.randomLocation(state)
-      state.snakePositions.insert(0, newLoc)
-      state.score += MOUSE_REWARD
-      state.miceEaten += 1
-      if state.miceEaten >= MICE_TO_WIN:
-        state.isWin = True
-    #new tile is empty
-    else:   
-      state.snakePositions.insert(0, newLoc)
-      state.snakePositions.pop()
-      state.score -= MOVE_PENALTY 
-
-class MouseRules:
-  """
-  Handles state changes for mice agents
-  """
-  
-  def getLegalActions(self, state, agentIndex):
-    possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    results = []
-    agentPos = state.getMicePositions()[agentIndex-1]
-    for move in possible_results:
-      if isValidLocation(state, (agentPos[0] + move[0], agentPos[1] + move[1])):
-        results.append(move)
-    return results
-
-  def applyAction(self, state, action, agentIndex):
-    newLoc = (state.micePositions[agentIndex-1] + action[0], state.micePositions[agentIndex-1] + action[1])
-    state.micePositions[agentIndex-1] = newLoc
-
-  #valid location is any square in the grid without a mouse or snake tile
-  def isValidLocation(self, state, location):
-    if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
-      return False
-    for loc in [state.getSnakePositions() + state.getMicePositions()]:
-      if loc == location:
-        return False
-    return True
-
-  #returns a random location on the board not taken up by snake or mice
-  def randomLocation(self, state):
-    while True:
-      possible = (random.randint(0, state.dimensions[0] - 1), random.randint(0, state.dimensions[1] - 1))
-      if isValidLocation(possible):
-        return possible
 
 class SnakeAgent:
   
@@ -165,9 +88,9 @@ class GameState:
     if self.won() or self.lost(): 
       return []
     if agentIndex == 0:  # Pacman is moving
-      return SnakeRules.getLegalActions(self)
+      return snakeRules.getLegalActions(self)
     else:
-      return MouseRules.getLegalActions(self, agentIndex)
+      return mouseRules.getLegalActions(self, agentIndex)
   
   def generateSuccessor(self, agentIndex, action):
     # Check that successors exist
@@ -177,9 +100,9 @@ class GameState:
     state = GameState(self)
     # Let agent's logic deal with its action's effects on the board
     if agentIndex == 0:  # Snake is moving
-      SnakeRules.applyAction(state, action) #TODO: implement snakerules
+      snakeRules.applyAction(state, action) #TODO: implement snakeRules
     else:                # A mouse
-      MouseRules.applyAction(state, action, agentIndex) #TODO: implement mouserules
+      mouseRules.applyAction(state, action, agentIndex) #TODO: implement mouseRules
     return state
 
   def getState(self):
@@ -277,7 +200,7 @@ snakeAgent.py
 Implementation Order: 
 
     GameState
-    SnakeRules
+    snakeRules
     MiceRules    
     GameController
     Game
