@@ -31,9 +31,6 @@ class SnakeAgent:
   
   def __init__(self):
     self.agentIndex = 0
-
-  def manhattanDistance( xy1, xy2 ):
-    return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
   
   def getAction(self, state):
     legalActions = state.getLegalActions(self.agentIndex)
@@ -43,6 +40,9 @@ class SnakeAgent:
     return legalActions[random.choice(bestIndices)]
   
   def evaluationFunction(self, state, action):
+    def manhattanDistance( xy1, xy2 ):
+      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
+      
     distanceToMouse = [manhattanDistance(i, state.snakePositions[0]) for i in state.micePositions]
     closestIndex = 0
     for i in range(1, len(distanceToMouse)):
