@@ -48,9 +48,8 @@ class SnakeAgent:
     def manhattanDistance( xy1, xy2 ):
       return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
     distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
-    # for i in range(len(distanceToMouse)):
-      # distanceToMouse[i] = float(1)/float(distanceToMouse[i])**(i+1)
-
+    #uncomment the following line to return average distance
+    #return float(1)/float(numpy.mean(distanceToMouse))
     closestIndex = 0
     for i in range(1, len(distanceToMouse)):
       if distanceToMouse[i] < distanceToMouse[closestIndex]:
