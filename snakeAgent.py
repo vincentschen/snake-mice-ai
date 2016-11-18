@@ -3,7 +3,11 @@ import subprocess
 import time
 from copy import deepcopy
 import snakeRules, mouseRules 
-  
+
+DEFAULT_DIMENSONS = (30, 30)
+DEFAULT_NUM_MICE = 5
+DEFAULT_NUM_GAMES = 1
+
 class GameRules: 
   """
   Manages initialization and termination of a game
@@ -132,13 +136,13 @@ class GameState:
   def displayGame(self):
     # process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
-    grid = [["[ ]" for col in range(numCols)] for row in range(numRows)]
+    grid = [["   " for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
-        grid[mouseX][mouseY] = "[*]"
+        grid[mouseX][mouseY] = " * "
     headX, headY = self.snakePositions[0]
-    grid[headX][headY] = "[0]"
+    grid[headX][headY] = " 0 "
     for snakeX, snakeY in self.snakePositions[1:]:
-        grid[snakeX][snakeY] = "[O]"
+        grid[snakeX][snakeY] = " O "
     screen = ""
     for row in range(numRows):
         for col in range(numCols):
@@ -176,7 +180,7 @@ class Game:
       time.sleep(.03)
       
       
-def runGames (dimensions, numMice, numGames):
+def runGames (numGames = DEFAULT_NUM_GAMES, dimensions = DEFAULT_DIMENSONS, numMice = DEFAULT_NUM_MICE):
   agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
@@ -197,7 +201,7 @@ def runGames (dimensions, numMice, numGames):
   return games
 
 if __name__ == '__main__':
-  runGames((30, 30), 5, 1)
+  runGames()
 
 """
 snakeAgent.py 
