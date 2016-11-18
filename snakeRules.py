@@ -1,5 +1,6 @@
 import mouseRules #TODO
 
+
 """
 Handles state changes for snake agent
 """
