@@ -152,16 +152,31 @@ class Game:
   Manages control flow of a game
   """
 
-  def __init__(self, rules, agents):
+  def __init__(self, rules, agents, snakeSpeed = 2):
     self.gameOver = False
     self.rules = rules
     self.agents = agents
     self.numSteps = 0
+    self.snakeSpeed = snakeSpeed
+
+  def agentGenerator(self, maxIndex):
+    index = 0
+    while True:
+      yield index
+      if index == maxIndex - 1:
+        index = 0
+        self.numSteps += 1
+      elif self.numSteps % self.snakeSpeed == 0:
+        index = index + 1
+      else:
+        index = index
+        self.numSteps += 1
 
   def run(self):
     self.state.displayGame()
-    agentIndex = 0
+    agentIndexer = self.agentGenerator(len(self.agents))
     while not self.gameOver:
+      agentIndex = agentIndexer.next()
       agent = self.agents[agentIndex]
       observedState = deepcopy(self.state)
       action = agent.getAction(observedState)
@@ -170,10 +185,7 @@ class Game:
       self.state = self.state.generateSuccessor(agentIndex, action)
       self.state.displayGame()
       self.rules.process(self.state, self)
-      if agentIndex == len(self.agents) + 1:
-        self.numSteps += 1
-      agentIndex = (agentIndex + 1 if self.numSteps % 2 == 0 else agentIndex) % len(self.agents)
-      time.sleep(.03)
+      time.sleep(.05)
       
       
 def runGames (dimensions, numMice, numGames):
