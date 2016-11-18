@@ -6,7 +6,7 @@ Handles state changes for mice agents
 
 MOVE_PENALTY = 1
 MOUSE_REWARD = 20
-MICE_TO_WIN = 25
+MICE_TO_WIN = 40
 
 def getLegalActions(state, agentIndex):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -30,7 +30,7 @@ def applyAction(state, action, agentIndex):
 
 #valid location is any square in the grid without a mouse or snake tile
 def isValidLocation(state, location):
-    if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
+    if location[0] >= state.dimensions[0] or location[0] < 0 or location[1] >= state.dimensions[1] or location[1] < 0:
       return False
     for loc in state.getSnakePositions()[1:] + state.getMicePositions():
       if loc == location:

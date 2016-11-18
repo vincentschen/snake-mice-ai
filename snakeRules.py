@@ -5,6 +5,7 @@ import mouseRules #TODO
 Handles state changes for snake agent
 """
 MOVE_PENALTY = 1
+IS_ORACLE = False
 
 def getLegalActions(state):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -18,11 +19,12 @@ def getLegalActions(state):
 # valid location is any square in the grid, 
 # even if there's a mouse or snake tile there
 def isValidLocation(state, location):
-    if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
+    if location[0] >= state.dimensions[0] or location[0] < 0 or location[1] >= state.dimensions[1] or location[1] < 0:
       return False
-    for loc in state.getSnakePositions():
-      if loc == location:
-        return False
+    if not IS_ORACLE:
+      for loc in state.getSnakePositions():
+        if loc == location:
+          return False
     return True
 
 def applyAction(state, action):
@@ -53,3 +55,5 @@ def applyAction(state, action):
       state.snakePositions.insert(0, newLoc)
       state.snakePositions.pop()
       state.score -= mouseRules.MOVE_PENALTY 
+
+
