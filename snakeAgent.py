@@ -4,12 +4,7 @@ import time
 import numpy
 from copy import deepcopy
 import snakeRules, mouseRules 
-
-DEFAULT_DIMENSONS = (20, 20)
-DEFAULT_NUM_MICE = 20
-DEFAULT_NUM_GAMES = 10
-DISPLAY = False
-SLEEP_TIME = 0
+import config
 
 class GameRules: 
   """
@@ -182,7 +177,7 @@ class Game:
         self.numSteps += 1
 
   def run(self):
-    if DISPLAY:
+    if config.DISPLAY:
       self.state.displayGame()
     agentIndexer = self.agentGenerator(len(self.agents))
     while not self.gameOver:
@@ -193,13 +188,13 @@ class Game:
       if action == []:
         break
       self.state = self.state.generateSuccessor(agentIndex, action)
-      if DISPLAY:
+      if config.DISPLAY:
         self.state.displayGame()
       self.rules.process(self.state, self)
-      time.sleep(SLEEP_TIME)
+      time.sleep(config.SLEEP_TIME)
       
       
-def runGames (numGames = DEFAULT_NUM_GAMES, dimensions = DEFAULT_DIMENSONS, numMice = DEFAULT_NUM_MICE):
+def runGames (numGames = config.DEFAULT_NUM_GAMES, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
   agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
