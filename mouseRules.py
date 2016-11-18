@@ -6,7 +6,7 @@ Handles state changes for mice agents
 
 MOVE_PENALTY = 1
 MOUSE_REWARD = 20
-MICE_TO_WIN = 50
+MICE_TO_WIN = 25
 
 def getLegalActions(state, agentIndex):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -15,6 +15,8 @@ def getLegalActions(state, agentIndex):
     for move in possible_results:
       if isValidLocation(state, (agentPos[0] + move[0], agentPos[1] + move[1])):
         results.append(move)
+    if len(results) == 0:
+      results.append((0,0))
     return results
 
 def applyAction(state, action, agentIndex):

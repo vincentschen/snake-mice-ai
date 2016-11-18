@@ -35,6 +35,8 @@ class SnakeAgent:
   
   def getAction(self, state):
     legalActions = state.getLegalActions(self.agentIndex)
+    if len(legalActions) == 0:
+      return []
     scores = [self.evaluationFunction(state, action) for action in legalActions]
     bestScore = max(scores)
     bestIndices = [i for i, action in enumerate(scores) if scores[i] == bestScore]
@@ -130,13 +132,13 @@ class GameState:
   def displayGame(self):
     # process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
-    grid = [["[ ]" for col in range(numCols)] for row in range(numRows)]
+    grid = [["   " for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
-        grid[mouseX][mouseY] = "[m]"
+        grid[mouseX][mouseY] = " * "
     headX, headY = self.snakePositions[0]
-    grid[headX][headY] = "[S]"
+    grid[headX][headY] = " 0 "
     for snakeX, snakeY in self.snakePositions[1:]:
-        grid[snakeX][snakeY] = "[s]"
+        grid[snakeX][snakeY] = " O "
     screen = ""
     for row in range(numRows):
         for col in range(numCols):
@@ -163,13 +165,15 @@ class Game:
       agent = self.agents[agentIndex]
       observedState = deepcopy(self.state)
       action = agent.getAction(observedState)
+      if action == []:
+        break
       self.state = self.state.generateSuccessor(agentIndex, action)
       self.state.displayGame()
       self.rules.process(self.state, self)
       if agentIndex == len(self.agents) + 1:
         self.numSteps += 1
       agentIndex = (agentIndex + 1 if self.numSteps % 2 == 0 else agentIndex) % len(self.agents)
-      time.sleep(.05)
+      
       
 def runGames (dimensions, numMice, numGames):
   agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
@@ -192,7 +196,7 @@ def runGames (dimensions, numMice, numGames):
   return games
 
 if __name__ == '__main__':
-  runGames((30, 30), 3, 1)
+  runGames((30, 30), 5, 10)
 
 """
 snakeAgent.py 
