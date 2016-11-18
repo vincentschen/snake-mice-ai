@@ -4,8 +4,14 @@ import mouseRules #TODO
 """
 Handles state changes for snake agent
 """
-MOVE_PENALTY = 1
 IS_ORACLE = False
+
+MOUSE_REWARD = 10
+MOVE_PENALTY = 1
+
+MICE_TO_WIN = 50
+
+
 
 def getLegalActions(state):
     possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -37,23 +43,23 @@ def applyAction(state, action):
       eatenMouseIndex = state.getMicePositions().index(newLoc)
       state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
       state.snakePositions.insert(0, newLoc)
-      state.score += mouseRules.MOUSE_REWARD
+      state.score += MOUSE_REWARD
       state.miceEaten += 1
-      if state.miceEaten >= mouseRules.MICE_TO_WIN:
+      if state.miceEaten >= MICE_TO_WIN:
         state.isWin = True
     # current tile has a mouse, wowowow!
     elif state.getSnakePositions()[0] in state.getMicePositions():
       eatenMouseIndex = state.getMicePositions().index(state.getSnakePositions()[0])
       state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
-      state.score += mouseRules.MOUSE_REWARD
+      state.score += MOUSE_REWARD
       state.miceEaten += 1
-      if state.miceEaten >= mouseRules.MICE_TO_WIN:
+      if state.miceEaten >= MICE_TO_WIN:
         state.isWin = True
       state.snakePositions.insert(0, newLoc)
     #new tile is empty
     else:   
       state.snakePositions.insert(0, newLoc)
       state.snakePositions.pop()
-      state.score -= mouseRules.MOVE_PENALTY 
+      state.score -= MOVE_PENALTY 
 
 

@@ -1,12 +1,15 @@
 import random
 import subprocess
 import time
+import numpy
 from copy import deepcopy
 import snakeRules, mouseRules 
 
-DEFAULT_DIMENSONS = (30, 30)
+DEFAULT_DIMENSONS = (10, 10)
 DEFAULT_NUM_MICE = 5
-DEFAULT_NUM_GAMES = 1
+DEFAULT_NUM_GAMES = 100
+DISPLAY = False
+SLEEP_TIME = 0
 
 class GameRules: 
   """
@@ -48,9 +51,11 @@ class SnakeAgent:
   
   def evaluationFunction(self, state, action):
     def manhattanDistance( xy1, xy2 ):
-      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )
-      
-    distanceToMouse = [manhattanDistance(i, state.snakePositions[0]) for i in state.micePositions]
+      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
+    distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
+    # for i in range(len(distanceToMouse)):
+      # distanceToMouse[i] = float(1)/float(distanceToMouse[i])**(i+1)
+
     closestIndex = 0
     for i in range(1, len(distanceToMouse)):
       if distanceToMouse[i] < distanceToMouse[closestIndex]:
@@ -177,7 +182,8 @@ class Game:
         self.numSteps += 1
 
   def run(self):
-    self.state.displayGame()
+    if DISPLAY:
+      self.state.displayGame()
     agentIndexer = self.agentGenerator(len(self.agents))
     while not self.gameOver:
       agentIndex = agentIndexer.next()
@@ -187,9 +193,10 @@ class Game:
       if action == []:
         break
       self.state = self.state.generateSuccessor(agentIndex, action)
-      self.state.displayGame()
+      if DISPLAY:
+        self.state.displayGame()
       self.rules.process(self.state, self)
-      time.sleep(.05)
+      time.sleep(SLEEP_TIME)
       
       
 def runGames (numGames = DEFAULT_NUM_GAMES, dimensions = DEFAULT_DIMENSONS, numMice = DEFAULT_NUM_MICE):
