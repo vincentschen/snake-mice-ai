@@ -32,7 +32,7 @@ def applyAction(state, action, agentIndex):
 def isValidLocation(state, location):
     if location[0] >= state.dimensions[0] or location[1] >= state.dimensions[1]:
       return False
-    for loc in state.getSnakePositions() + state.getMicePositions():
+    for loc in state.getSnakePositions()[1:] + state.getMicePositions():
       if loc == location:
         return False
     return True

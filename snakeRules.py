@@ -39,6 +39,15 @@ def applyAction(state, action):
       state.miceEaten += 1
       if state.miceEaten >= mouseRules.MICE_TO_WIN:
         state.isWin = True
+    # current tile has a mouse, wowowow!
+    elif state.getSnakePositions()[0] in state.getMicePositions():
+      eatenMouseIndex = state.getMicePositions().index(state.getSnakePositions()[0])
+      state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
+      state.score += mouseRules.MOUSE_REWARD
+      state.miceEaten += 1
+      if state.miceEaten >= mouseRules.MICE_TO_WIN:
+        state.isWin = True
+      state.snakePositions.insert(0, newLoc)
     #new tile is empty
     else:   
       state.snakePositions.insert(0, newLoc)

@@ -173,6 +173,7 @@ class Game:
       if agentIndex == len(self.agents) + 1:
         self.numSteps += 1
       agentIndex = (agentIndex + 1 if self.numSteps % 2 == 0 else agentIndex) % len(self.agents)
+      time.sleep(.03)
       
       
 def runGames (dimensions, numMice, numGames):
@@ -196,7 +197,7 @@ def runGames (dimensions, numMice, numGames):
   return games
 
 if __name__ == '__main__':
-  runGames((30, 30), 5, 10)
+  runGames((30, 30), 5, 1)
 
 """
 snakeAgent.py 
