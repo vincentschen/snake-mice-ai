@@ -132,13 +132,13 @@ class GameState:
   def displayGame(self):
     # process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
-    grid = [["   " for col in range(numCols)] for row in range(numRows)]
+    grid = [["[ ]" for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
-        grid[mouseX][mouseY] = " * "
+        grid[mouseX][mouseY] = "[*]"
     headX, headY = self.snakePositions[0]
-    grid[headX][headY] = " 0 "
+    grid[headX][headY] = "[0]"
     for snakeX, snakeY in self.snakePositions[1:]:
-        grid[snakeX][snakeY] = " O "
+        grid[snakeX][snakeY] = "[O]"
     screen = ""
     for row in range(numRows):
         for col in range(numCols):
@@ -197,7 +197,7 @@ def runGames (dimensions, numMice, numGames):
   return games
 
 if __name__ == '__main__':
-  runGames((30, 30), 5, 1)
+  runGames((10, 10), 5, 1)
 
 """
 snakeAgent.py 
