@@ -5,9 +5,9 @@ import numpy
 from copy import deepcopy
 import snakeRules, mouseRules 
 
-DEFAULT_DIMENSONS = (10, 10)
-DEFAULT_NUM_MICE = 5
-DEFAULT_NUM_GAMES = 100
+DEFAULT_DIMENSONS = (20, 20)
+DEFAULT_NUM_MICE = 20
+DEFAULT_NUM_GAMES = 10
 DISPLAY = False
 SLEEP_TIME = 0
 

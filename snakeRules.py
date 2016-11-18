@@ -6,10 +6,11 @@ Handles state changes for snake agent
 """
 IS_ORACLE = False
 
-MOUSE_REWARD = 10
+# MOUSE_REWARD = 10
 MOVE_PENALTY = 1
 
-MICE_TO_WIN = 50
+MICE_TO_WIN = 200
+MOUSE_REWARD_MULTIPLIER = 1
 
 
 
@@ -43,15 +44,15 @@ def applyAction(state, action):
       eatenMouseIndex = state.getMicePositions().index(newLoc)
       state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
       state.snakePositions.insert(0, newLoc)
-      state.score += MOUSE_REWARD
       state.miceEaten += 1
+      state.score += state.miceEaten * MOUSE_REWARD_MULTIPLIER
       if state.miceEaten >= MICE_TO_WIN:
         state.isWin = True
     # current tile has a mouse, wowowow!
     elif state.getSnakePositions()[0] in state.getMicePositions():
       eatenMouseIndex = state.getMicePositions().index(state.getSnakePositions()[0])
       state.micePositions[eatenMouseIndex] = mouseRules.randomLocation(state)
-      state.score += MOUSE_REWARD
+      state.score += state.miceEaten * MOUSE_REWARD_MULTIPLIER
       state.miceEaten += 1
       if state.miceEaten >= MICE_TO_WIN:
         state.isWin = True
