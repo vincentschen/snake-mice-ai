@@ -197,7 +197,7 @@ def runGames (dimensions, numMice, numGames):
   return games
 
 if __name__ == '__main__':
-  runGames((10, 10), 5, 1)
+  runGames((30, 30), 5, 1)
 
 """
 snakeAgent.py 
