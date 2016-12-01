@@ -1,9 +1,15 @@
 # Snake Game with Mice Agent 
 
-## Installation
+## First-time setup 
+1. Install `virtualenv` globally on your system: `pip install virtualenv`
+2. Create a virtual environment for this project: `virtualenv venv`
+3. Install current requirements locally in the virtual environment: `pip install -r requirements.txt`
 
-### Pygame 
+## During work sesh
+1. Activate the virtual environment so that you have access to the locally installed requirements: `source venv/bin/activate`
 
-OSX: 
-- http://pygame.org/wiki/macintosh 
-- If XQuartz gets stuck: `sudo installer -pkg ~/Desktop/XQuartz.pkg -target /`
+If you encounter a runtime error, it's probably because someone installed a new requirement and you don't have it locally. So update your virtual environment with: `pip install -r requirements.txt` 
+
+## If you change requirements...  
+1. Install new requirement using pip: `pip install 'new_library'`
+2. Save them so that we have access: `pip freeze > requirements.txt`
