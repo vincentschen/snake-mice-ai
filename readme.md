@@ -7,6 +7,7 @@
 
 ## During work sesh
 1. Activate the virtual environment so that you have access to the locally installed requirements: `source venv/bin/activate`
+2. When you're done, deactivate the virtual environment with: `deactivate`
 
 If you encounter a runtime error, it's probably because someone installed a new requirement and you don't have it locally. So update your virtual environment with: `pip install -r requirements.txt` 
 
