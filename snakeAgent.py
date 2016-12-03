@@ -155,7 +155,7 @@ class Game:
   Manages control flow of a game
   """
 
-  def __init__(self, rules, agents, snakeSpeed = 2):
+  def __init__(self, rules, agents, snakeSpeed = config.SNAKE_SPEED):
     self.gameOver = False
     self.rules = rules
     self.agents = agents
