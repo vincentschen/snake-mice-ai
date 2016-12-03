@@ -14,3 +14,6 @@ If you encounter a runtime error, it's probably because someone installed a new 
 ## If you change requirements...  
 1. Install new requirement using pip: `pip install 'new_library'`
 2. Save them so that we have access: `pip freeze > requirements.txt`
+
+## Run 
+`python snakeAgent.py -s <agentType>`
