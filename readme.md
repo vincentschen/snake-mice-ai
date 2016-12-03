@@ -13,4 +13,14 @@ If you encounter a runtime error, it's probably because someone installed a new 
 
 ## If you change requirements...  
 1. Install new requirement using pip: `pip install 'new_library'`
+<<<<<<< HEAD
 2. Save them so that we have access: `pip freeze > requirements.txt`
+=======
+2. Save them so that we have access: `pip freeze > requirements.txt`
+
+## Run 
+Pass in the snake agent with `-s` and the number of trials with `-n`. For quiet mode (or no graphics), use `-q`.
+
+For example: `python snakeAgent.py -s greedy -n 10 -q`
+This will run the Greedy snake agent 10 times, with no graphics. 
+>>>>>>> 0089d25442b5a151c75c29be75d34dd5e437db71

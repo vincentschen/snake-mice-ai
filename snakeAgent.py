@@ -1,9 +1,13 @@
+import sys
+from optparse import OptionParser
+
 import random
-import subprocess
+# import subprocess
 import time
 import numpy
 from copy import deepcopy
-import snakeRules, mouseRules 
+import snakeRules, mouseRules
+import agents
 import config
 
 class GameRules: 
@@ -29,42 +33,6 @@ class GameRules:
   def lose(self, state, game):
     print "Lose (Score = %d" % state.score
     game.gameOver = True
-
-class SnakeAgent:
-  
-  def __init__(self):
-    self.agentIndex = 0
-  
-  def getAction(self, state):
-    legalActions = state.getLegalActions(self.agentIndex)
-    if len(legalActions) == 0:
-      return []
-    scores = [self.evaluationFunction(state, action) for action in legalActions]
-    bestScore = max(scores)
-    bestIndices = [i for i, action in enumerate(scores) if scores[i] == bestScore]
-    return legalActions[random.choice(bestIndices)]
-  
-  def evaluationFunction(self, state, action):
-    def manhattanDistance( xy1, xy2 ):
-      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
-    distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
-    #uncomment the following line to return average distance
-    # return float(1)/float(numpy.mean(distanceToMouse))
-    closestIndex = 0
-    for i in range(1, len(distanceToMouse)):
-      if distanceToMouse[i] < distanceToMouse[closestIndex]:
-        closestIndex = i
-    newSnakeHeadLoc = (state.snakePositions[0][0] + action[0], state.snakePositions[0][1] + action[1])
-    return -1*manhattanDistance(state.micePositions[closestIndex], newSnakeHeadLoc)
-
-class MouseAgent:
-  
-  def __init__(self, agentIndex):
-    self.agentIndex = agentIndex
-  
-  def getAction(self, state):
-    legalActions = state.getLegalActions(self.agentIndex)
-    return random.choice(legalActions)
 
 class GameState: 
   """
@@ -150,12 +118,25 @@ class GameState:
     print screen
     print "Score: %d" % self.getScore()
 
+class Agent:
+  """
+  An abstract agent that must define a getAction method.
+  """
+  def __init__(self, index=0):
+    self.agentIndex = index
+
+  def getAction(self, state):
+    """
+    The Agent will receive a GameState and return an action.
+    """
+    raise NotImplementedError()
+
 class Game:
   """
   Manages control flow of a game
   """
 
-  def __init__(self, rules, agents, snakeSpeed = 2):
+  def __init__(self, rules, agents, snakeSpeed = config.SNAKE_SPEED):
     self.gameOver = False
     self.rules = rules
     self.agents = agents
@@ -175,8 +156,8 @@ class Game:
         index = index
         self.numSteps += 1
 
-  def run(self):
-    if config.DISPLAY:
+  def run(self, quiet):
+    if not quiet:
       self.state.displayGame()
     agentIndexer = self.agentGenerator(len(self.agents))
     while not self.gameOver:
@@ -187,7 +168,7 @@ class Game:
       if action == []:
         break
       self.state = self.state.generateSuccessor(agentIndex, action)
-      if config.DISPLAY:
+      if not quiet:
         if config.SHOW_EACH_AGENT_MOVE:
           self.state.displayGame()
           time.sleep(config.SLEEP_TIME)
@@ -201,14 +182,13 @@ class Game:
       self.rules.process(self.state, self)
       
           
-      
-def runGames (numGames = config.DEFAULT_NUM_GAMES, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
-  agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
+def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES, quiet = config.DISPLAY, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
+  agents = [snakeAgent()] + [mouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
   for i in range(numGames):
     game = rules.newGame(dimensions, agents, numMice)
-    game.run()
+    game.run(quiet)
     games.append(game)
   
   #pacman scoring
@@ -222,8 +202,29 @@ def runGames (numGames = config.DEFAULT_NUM_GAMES, dimensions = config.DEFAULT_D
   
   return games
 
+def main(argv):
+    parser = OptionParser()
+    parser.add_option("-s", "--snake", action="store", type="string", dest="snakeAgent")
+    parser.add_option("-n", "--numGames", action="store", type="int", dest="numGames")
+    parser.add_option("-q", "--quiet", action="store_true", dest="quiet")
+    (options, args) = parser.parse_args(argv)
+    
+    mouseAgent = agents.RandomMouse
+    
+    # set snakeAgent
+    snakeAgent = None
+    if options.snakeAgent == "greedy":
+        snakeAgent = agents.GreedyAgent
+    elif options.snakeAgent == "expectimax": 
+        snakeAgent = agents.ExpectimaxAgent
+
+    if options.numGames is not None: runGames(snakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)
+    else: runGames(snakeAgent, mouseAgent, quiet = options.quiet)
+
+
 if __name__ == '__main__':
-  runGames()
+  main(sys.argv[1:])
+
 
 """
 snakeAgent.py 
