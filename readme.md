@@ -16,4 +16,7 @@ If you encounter a runtime error, it's probably because someone installed a new 
 2. Save them so that we have access: `pip freeze > requirements.txt`
 
 ## Run 
-`python snakeAgent.py -s <agentType>`
+Pass in the snake agent with `-s` and the number of trials with `-n`. For quiet mode (or no graphics), use `-q`.
+
+For example: `python snakeAgent.py -s greedy -n 10 -q`
+This will run the Greedy snake agent 10 times, with no graphics. 
