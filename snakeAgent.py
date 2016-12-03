@@ -188,10 +188,19 @@ class Game:
         break
       self.state = self.state.generateSuccessor(agentIndex, action)
       if config.DISPLAY:
-        self.state.displayGame()
-      self.rules.process(self.state, self)
-      time.sleep(config.SLEEP_TIME)
+        if config.SHOW_EACH_AGENT_MOVE:
+          self.state.displayGame()
+          time.sleep(config.SLEEP_TIME)
+
+        else:
+          # show simultaneous movements  
+          if agentIndex == 0: 
+            self.state.displayGame()
+            time.sleep(config.SLEEP_TIME)
       
+      self.rules.process(self.state, self)
+      
+          
       
 def runGames (numGames = config.DEFAULT_NUM_GAMES, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
   agents = [SnakeAgent()] + [MouseAgent(i) for i in range(1, numMice + 1)]
