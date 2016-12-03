@@ -9,6 +9,12 @@ DEFAULT_DIMENSONS = (20, 20)
 DEFAULT_NUM_MICE = 20
 DEFAULT_NUM_GAMES = 10
 
+# what do each of these items look like in the graphics? 
+SNAKE_HEAD = "0"
+MOUSE = "*"
+SNAKE_BODY = "O"
+GRID_SPACE = " "
+
 DISPLAY = True
 SLEEP_TIME = 0.1
-SHOW_EACH_AGENT_MOVE = False
+SHOW_EACH_AGENT_MOVE = False #if True, you can see each agent's move every turn 
