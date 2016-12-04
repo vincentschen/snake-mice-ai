@@ -66,15 +66,15 @@ def k_norm(head, points):
     return norm 
 
 # TODO: Use this function for some heuristic?
-def getSnakeCornersHashedByX(snakePositions):
+def getSnakeCornersHashedByRow(snakePositions):
     """
-    This function returns a dictionary mapping x-coordinate values to 
+    This function returns a dictionary mapping row values to 
     lists of corner coordinates (snake positions) in a heapq configuration
-    for which this value is the x-coordinate
+    for which this value is the row
     """
-    xHashed = defaultdict(list)
-    heapq.heappush(xHashed[snakePositions[0][0]], snakePositions[0]) 
-    heapq.heappush(xHashed[snakePositions[-1][0]], snakePositions[-1]) 
+    rowHashed = defaultdict(list)
+    heapq.heappush(rowHashed[snakePositions[0][0]], snakePositions[0]) 
+    heapq.heappush(rowHashed[snakePositions[-1][0]], snakePositions[-1]) 
     for i in range(len(snakePositions)):
         snakeX1, snakeY1 = snakePositions[i]
         try:
@@ -83,21 +83,21 @@ def getSnakeCornersHashedByX(snakePositions):
             yDiff = snakeY1 - snakeY2
             if (xDiff == 1 or xDiff == -1) and (yDiff == 1 or yDiff == -1):
                 corner = snakePositions[i + 1]
-                heapq.heappush(xHashed[corner[0]], corner)
+                heapq.heappush(rowHashed[corner[0]], corner)
         except IndexError:
             pass
-    return xHashed
+    return rowHashed
 
 def getSnakePolygon(snakePositions):
     """
     This function returns a polygon as defined in the shapely library
     composed of the points defining the perimeter of the snake for the
-    x and y coorindate value ranges that it occupies
+    row and col coorindate value ranges that it occupies
 
     Area ($area$) is an instance variable of the polygon
     """
-    # dict of x values to lists of positions with that x value
-    # sorted by increasing y value
+    # dict of row values to lists of positions with that row value
+    # sorted by increasing col value
     snakePositionsByRow = defaultdict(list)
     for snakeRow, snakeCol in snakePositions:
         heapq.heappush(snakePositionsByRow[snakeRow], (snakeRow, snakeCol)) 
