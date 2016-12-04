@@ -116,7 +116,6 @@ def getSnakePolygon(snakePositions):
     bottomPositions.reverse()
     perimeterPositions = topPositions + rightPositions + bottomPositions
     perimeterPositions.extend(leftPositions)
-    print perimeterPositions
     return geometry.Polygon([[p[0], p[1]] for p in perimeterPositions])
 
 def isAValidLocation(pos, snakePositions, dimensions):
@@ -139,7 +138,6 @@ def updateAccessiblePositions(start, accessiblePositions, snakePositions, dimens
     nextPositions = [(startRow, startCol + 1), (startRow, startCol - 1), (startRow + 1, startCol), (startRow - 1, startCol)]
     for nextPos in nextPositions:
         if isAValidLocation(nextPos, snakePositions, dimensions) and nextPos not in accessiblePositions:
-            print nextPos
             accessiblePositions.add(nextPos)
             updateAccessiblePositions(nextPos, accessiblePositions, snakePositions, dimensions)
 
