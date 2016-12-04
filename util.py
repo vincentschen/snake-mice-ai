@@ -1,20 +1,25 @@
 def getStraightLength(self, state, action):
-  if len(state.snakePositions) <= 1: #here any action will result in a straight length of 2
+  #CASE 1: Snake of length 1
+  if len(state.snakePositions) == 1: #here any action will result in a straight length of 2
     return 2
-  #this represents our current direction
-  currentDirection = (state.snakePositions[0][0]-state.snakePositions[1][0], state.snakePositions[0][1]-state.snakePositions[1][1])
-  #you picked the right action, so we can keep this straight line going
-  if(action == currentDirection):
-    currStraight = 3
-    for pos in state.snakePositions[2:]:
-      latest = state.snakePositions[straightLength-2]
-      if pos == (latest[0] - currentDirection[0], latest[1] -currentDirection[1]): #subtract the current direction (cause we're working backwards)\
-        straightLength += 1
-      else:
-        return straightLength
+  #CASE 2: Snake of length 2
+  currentDirection = (state.snakePositions[0][0]-state.snakePositions[1][0], state.snakePositions[0][1]-state.snakePositions[1][1]) #this represents our current direction
+  if len(state.snakePositions) == 2: #here the right action will result in a straight length of 2
+    if action == currentDirection:
+      return 3
+    else:
+      return 2
+  #CASE 3: Snake of length 3 or more
   #you picked the wrong direction, so we get two, the minimum
-  else:
+  if(action != currentDirection):
     return 2
+  #you picked the right action, so we can keep this straight line going
+  else:
+    currStraight = 2
+    head = state.snakePositions[0]
+    while currStraight < len(state.snakePositions) and state.snakePositions[currStraight] == (head[0] - currStraight*currentDirection[0], head[1] - currStraight*currentDirection[1]):
+      currStraight += 1
+    return currStraight + 1 #plus one for our direction being correct
 
 def manhattanDistance( xy1, xy2 ):
   return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
