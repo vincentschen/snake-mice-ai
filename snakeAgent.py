@@ -1,8 +1,6 @@
 import sys
 from optparse import OptionParser
-
 import random
-# import subprocess
 import time
 import numpy
 from copy import deepcopy
@@ -101,7 +99,6 @@ class GameState:
     return self.isWin
 
   def displayGame(self):
-    # process = subprocess.Popen("clear")
     numRows, numCols = self.dimensions
     grid = [[" %s " % (config.GRID_SPACE) for col in range(numCols)] for row in range(numRows)]
     for mouseX, mouseY in self.micePositions:
@@ -224,23 +221,3 @@ def main(argv):
 
 if __name__ == '__main__':
   main(sys.argv[1:])
-
-
-"""
-snakeAgent.py 
-  oracle
-  basline
-  keyboard 
-  different models/heuristics 
-
-    
-Implementation Order: 
-
-    GameState
-    snakeRules
-    MiceRules    
-    GameController
-    Game
-      runGame
-    SnakeAgents
-"""
