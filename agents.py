@@ -1,5 +1,6 @@
 import random
 from snakeAgent import Agent
+from util import * 
 
 class GreedyAgent(Agent):
 
@@ -13,8 +14,6 @@ class GreedyAgent(Agent):
     return legalActions[random.choice(bestIndices)]
   
   def evaluationFunction(self, state, action):
-    def manhattanDistance( xy1, xy2 ):
-      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
     distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
     #uncomment the following line to return average distance
     # return float(1)/float(numpy.mean(distanceToMouse))
