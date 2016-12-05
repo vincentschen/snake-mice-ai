@@ -75,13 +75,12 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     expectimax, action = recurse(gameState, self.index, self.depth)
     return action
 
-  
   def evaluationFunction(self, state):        
     
     weights = {
-        'score': (1, state.score),
-        'manhattan_distance_to_closest_mouse': (-0.2, distanceToClosestMouse(state)),
-        # 'straight_length_without_turn': (0.1, getStraightLength(state))
+        'score': (0, state.score),
+        'manhattan_distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),
+        'straight_length_without_turn': (0, getStraightLength(state))
     }
     
     # for key, weight in weights.iteritems(): print key, weight[0], weight[1]

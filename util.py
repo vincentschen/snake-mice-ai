@@ -9,30 +9,19 @@ def distanceToClosestMouse(state):
   for i in range(1, len(distanceToMouse)):
     if distanceToMouse[i] < distanceToMouse[closestIndex]:
       closestIndex = i
-  return -1*manhattanDistance(state.micePositions[closestIndex], state.snakePositions[0])
+  return manhattanDistance(state.micePositions[closestIndex], state.snakePositions[0])
 
-def getStraightLength(state, action):
-  #CASE 1: Snake of length 1
-  if len(state.snakePositions) == 1: #here any action will result in a straight length of 2
-    return 2
-  #CASE 2: Snake of length 2
-  currentDirection = (state.snakePositions[0][0]-state.snakePositions[1][0], state.snakePositions[0][1]-state.snakePositions[1][1]) #this represents our current direction
-  if len(state.snakePositions) == 2: #here the right action will result in a straight length of 2
-    if action == currentDirection:
-      return 3
-    else:
-      return 2
-  #CASE 3: Snake of length 3 or more
-  #you picked the wrong direction, so we get two, the minimum
-  if(action != currentDirection):
-    return 2
-  #you picked the right action, so we can keep this straight line going
-  else:
+def getStraightLength(state):
+    #CASE 1: Snake of length 1, 2
+    if len(state.snakePositions) <= 2: #here the straight length so far is just len of snake
+        return len(state.snakePositions)
+    #CASE 2: Snake of length 3 or more  
+    currentDirection = (state.snakePositions[0][0]-state.snakePositions[1][0], state.snakePositions[0][1]-state.snakePositions[1][1]) #this represents our current direction
     currStraight = 2
     head = state.snakePositions[0]
     while currStraight < len(state.snakePositions) and state.snakePositions[currStraight] == (head[0] - currStraight*currentDirection[0], head[1] - currStraight*currentDirection[1]):
-      currStraight += 1
-    return currStraight + 1 #plus one for our direction being correct
+        currStraight += 1
+    return currStraight
 
 def manhattanDistance( xy1, xy2 ):
   return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
@@ -96,35 +85,25 @@ def getSnakeCornersHashedByRow(snakePositions):
             pass
     return rowHashed
 
-def getSnakePolygon(snakePositions):
+def getSnakeRectangleArea(snakePositions, dimensions):
     """
-    This function returns a polygon as defined in the shapely library
-    composed of the points defining the perimeter of the snake for the
-    row and col coorindate value ranges that it occupies
+    This function returns a the rectangle area defined by the row and
+    column ranges of the snape positions.
+    """
+    minRow, minCol = dimensions
+    maxRow, maxCol = (0, 0)
+    for pos in snakePositions:
+        posRow, posCol = pos
+        if posRow < minRow:
+            minRow = posRow
+        if posRow > maxRow:
+            maxRow = posRow
+        if posCol < minCol:
+            minCol = posCol
+        if posCol > maxCol:
+            maxCol = posCol
+    return (maxRow - minRow) * (maxCol - minCol)
 
-    Area ($area$) is an instance variable of the polygon
-    """
-    # dict of row values to lists of positions with that row value
-    # sorted by increasing col value
-    snakePositionsByRow = defaultdict(list)
-    for snakeRow, snakeCol in snakePositions:
-        heapq.heappush(snakePositionsByRow[snakeRow], (snakeRow, snakeCol)) 
-    sortedRows = sorted(snakePositionsByRow)
-    topPositions = snakePositionsByRow[sortedRows[0]]
-    rightPositions = []
-    bottomPositions = snakePositionsByRow[sortedRows[-1]]
-    leftPositions = deque()
-    # fill topPositions and bottomPositions in one pass, L to R
-    for row in sortedRows[1:-1]:
-        positionsGivenRow = snakePositionsByRow[row]
-        rightPositions.append(heapq.nlargest(1, positionsGivenRow)[0])
-        # no double counting
-        if len(positionsGivenRow) > 1:
-            leftPositions.appendleft(heapq.nsmallest(1, positionsGivenRow)[0])
-    bottomPositions.reverse()
-    perimeterPositions = topPositions + rightPositions + bottomPositions
-    perimeterPositions.extend(leftPositions)
-    return geometry.Polygon([[p[0], p[1]] for p in perimeterPositions])
 
 def isAValidLocation(pos, snakePositions, dimensions):
     """

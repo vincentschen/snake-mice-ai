@@ -17,5 +17,5 @@ SNAKE_BODY = "O"
 GRID_SPACE = " "
 
 DISPLAY = True
-SLEEP_TIME = 0.1
+SLEEP_TIME = 0.08
 SHOW_EACH_AGENT_MOVE = False #if True, you can see each agent's move every turn 
