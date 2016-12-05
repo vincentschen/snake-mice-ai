@@ -37,7 +37,7 @@ class ExpectimaxAgent(Agent):
   
   def evaluationFunction(self, state, action):
     
-    straight_length_without_turn = getStraightLength(state, action)
+    straight_length_without_turn = getStraightLength(state)
     # straight_length_without_turn = 0
     
     weights = {
