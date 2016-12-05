@@ -2,7 +2,6 @@ import sys
 from optparse import OptionParser
 import random
 import time
-import numpy
 from copy import deepcopy
 import snakeRules, mouseRules
 import agents

@@ -47,7 +47,7 @@ class ExpectimaxAgent(Agent):
     for key, weight in weights.iteritems(): 
         print key, weight[0], weight[1]
     
-    score = sum([val[0]*va[1] for key, val in weights.iteritems()])
+    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
     return score
 
 class RandomMouse(Agent):
