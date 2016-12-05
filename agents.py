@@ -33,8 +33,8 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       All agents should be modeled as choosing uniformly at random from their
       legal moves.
     """
+    
 
-    # BEGIN_YOUR_CODE (our solution is 25 lines of code, but don't worry if you deviate from this)
     n = gameState.getNumAgents()         
     def recurse(state, index, depth):         
         # end state
@@ -49,8 +49,9 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         if (index == 0):
             choices = [(recurse(state.generateSuccessor(index, action), index+1, depth)[0], action) \
                 for action in state.getLegalActions(index)] 
-
-            return max(choices)
+            
+            if len(choices) == 0: return (0,[])
+            else: return max(choices)
             
         legalActions = state.getLegalActions(index)
         uniformProbability = 1.0 / len(legalActions)
@@ -75,22 +76,17 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     return action
 
   
-  def evaluationFunction(self, state):
-    
-    # straight_length_without_turn = getStraightLength(state)
-    # straight_length_without_turn = 0
-        
+  def evaluationFunction(self, state):        
     
     weights = {
         'score': (1, state.score),
-        'manhattan_distance_to_closest_mouse': (0.2, distanceToClosestMouse(state)) 
-        # 'straight_length_without_turn': (1, straight_length_without_turn)
+        'manhattan_distance_to_closest_mouse': (-0.2, distanceToClosestMouse(state)),
+        # 'straight_length_without_turn': (0.1, getStraightLength(state))
     }
     
     # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
     score = sum([val[0]*val[1] for key, val in weights.iteritems()])
      
-    # print score, self.depth
     return score
 
 class RandomMouse(Agent):

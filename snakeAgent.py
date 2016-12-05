@@ -215,7 +215,7 @@ def main(argv):
     # set snakeAgent
     snakeAgent = None
     if options.snakeAgent == "greedy":
-        snakeAgent = agents.GreedyAgent
+        snakeAgent = agents.GreedyAgent()
     elif options.snakeAgent == "expectimax": 
         if options.depth is not None: snakeAgent = agents.ExpectimaxAgent(options.depth)
         else: snakeAgent = agents.ExpectimaxAgent()
