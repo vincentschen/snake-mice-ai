@@ -78,9 +78,9 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
   def evaluationFunction(self, state):        
     
     weights = {
-        'score': (0, state.score),
-        'manhattan_distance_to_closest_mouse': (0, distanceToClosestMouse(state)),
-        'straight_length_without_turn': (1, getStraightLength(state))
+        'score': (1, state.score),
+        'manhattan_distance_to_closest_mouse': (-0.5, distanceToClosestMouse(state)),
+        'straight_length_without_turn': (0.1, getStraightLength(state))
     }
     
     # for key, weight in weights.iteritems(): print key, weight[0], weight[1]

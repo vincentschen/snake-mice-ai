@@ -206,7 +206,7 @@ def main(argv):
     parser.add_option("-s", "--snake", action="store", type="string", dest="snakeAgent")
     parser.add_option("-n", "--numGames", action="store", type="int", dest="numGames")
     parser.add_option("-q", "--quiet", action="store_true", dest="quiet")
-    parser.add_option("-d", "--depth", action="store_true", dest="depth")
+    parser.add_option("-d", "--depth", action="store", type="int", dest="depth")
 
     (options, args) = parser.parse_args(argv)
     
