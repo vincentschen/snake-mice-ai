@@ -85,6 +85,23 @@ def getSnakeCornersHashedByRow(snakePositions):
             pass
     return rowHashed
 
+def getNumSnakeCorners(snakePositions):
+    """
+    Changed copy of the above
+    """
+    count = 2
+    for i in range(len(snakePositions)):
+        snakeX1, snakeY1 = snakePositions[i]
+        try:
+            snakeX2, snakeY2 = snakePositions[i + 2]
+            xDiff = snakeX1 - snakeX2
+            yDiff = snakeY1 - snakeY2
+            if (xDiff == 1 or xDiff == -1) and (yDiff == 1 or yDiff == -1):
+                count += 1
+        except IndexError:
+            pass
+    return count
+
 def getSnakeRectangleArea(snakePositions, dimensions):
     """
     This function returns a the rectangle area defined by the row and
