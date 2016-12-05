@@ -186,6 +186,7 @@ def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES, quiet
   rules = GameRules()
   games = []
   for i in range(numGames):
+    print "Game " + str(i) + "/" + str(numGames)
     game = rules.newGame(dimensions, agents, numMice)
     game.run(quiet)
     games.append(game)

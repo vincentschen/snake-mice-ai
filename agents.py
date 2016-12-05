@@ -80,9 +80,9 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     weights = {
         'score': (1, state.score),
         'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),
-        'straight_length_without_turn': (0.1, getStraightLength(state))
+        'straight_length_without_turn': (0.1, getStraightLength(state)),
         # 'snake_rectangle_area': (-0.5, getSnakeRectangleArea(state.snakePositions, state.dimensions))
-        # 'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+        # 'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions))
         # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
     }
     
