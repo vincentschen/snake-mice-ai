@@ -79,10 +79,11 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     
     # straight_length_without_turn = getStraightLength(state)
     # straight_length_without_turn = 0
+        
     
     weights = {
         'score': (1, state.score),
-        'manhattan_distance_to_closest_mouse': (0.2, ) 
+        'manhattan_distance_to_closest_mouse': (0.2, distanceToClosestMouse(state)) 
         # 'straight_length_without_turn': (1, straight_length_without_turn)
     }
     
@@ -90,7 +91,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     score = sum([val[0]*val[1] for key, val in weights.iteritems()])
      
     # print score, self.depth
-    return state.score
+    return score
 
 class RandomMouse(Agent):
   

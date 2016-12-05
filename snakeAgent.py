@@ -182,7 +182,7 @@ class Game:
       
           
 def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES, quiet = config.DISPLAY, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
-  agents = [snakeAgent()] + [mouseAgent(i) for i in range(1, numMice + 1)]
+  agents = [snakeAgent] + [mouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
   for i in range(numGames):
@@ -206,6 +206,8 @@ def main(argv):
     parser.add_option("-s", "--snake", action="store", type="string", dest="snakeAgent")
     parser.add_option("-n", "--numGames", action="store", type="int", dest="numGames")
     parser.add_option("-q", "--quiet", action="store_true", dest="quiet")
+    parser.add_option("-d", "--depth", action="store_true", dest="depth")
+
     (options, args) = parser.parse_args(argv)
     
     mouseAgent = agents.RandomMouse
@@ -215,7 +217,8 @@ def main(argv):
     if options.snakeAgent == "greedy":
         snakeAgent = agents.GreedyAgent
     elif options.snakeAgent == "expectimax": 
-        snakeAgent = agents.ExpectimaxAgent
+        if options.depth is not None: snakeAgent = agents.ExpectimaxAgent(options.depth)
+        else: snakeAgent = agents.ExpectimaxAgent()
 
     if options.numGames is not None: runGames(snakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)
     else: runGames(snakeAgent, mouseAgent, quiet = options.quiet)
