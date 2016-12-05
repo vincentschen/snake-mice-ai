@@ -38,14 +38,14 @@ class ExpectimaxAgent(Agent):
   def evaluationFunction(self, state, action):
     
     straight_length_without_turn = getStraightLength(state, action)
+    # straight_length_without_turn = 0
     
     weights = {
         'score': (1, state.score), 
         'straight_length_without_turn': (1, straight_length_without_turn)
     }
     
-    for key, weight in weights.iteritems(): 
-        print key, weight[0], weight[1]
+    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
     
     score = sum([val[0]*val[1] for key, val in weights.iteritems()])
     return score
