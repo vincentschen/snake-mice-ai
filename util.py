@@ -3,7 +3,7 @@ from collections import defaultdict
 from collections import deque
 import heapq
 
-def getStraightLength(self, state, action):
+def getStraightLength(state, action):
   #CASE 1: Snake of length 1
   if len(state.snakePositions) == 1: #here any action will result in a straight length of 2
     return 2

@@ -36,15 +36,19 @@ class ExpectimaxAgent(Agent):
     return legalActions[random.choice(bestIndices)]
   
   def evaluationFunction(self, state, action):
-    def manhattanDistance( xy1, xy2 ):
-      return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
-    distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
-    closestIndex = 0
-    for i in range(1, len(distanceToMouse)):
-      if distanceToMouse[i] < distanceToMouse[closestIndex]:
-        closestIndex = i
-    newSnakeHeadLoc = (state.snakePositions[0][0] + action[0], state.snakePositions[0][1] + action[1])
-    return -1*manhattanDistance(state.micePositions[closestIndex], newSnakeHeadLoc)
+    
+    straight_length_without_turn = getStraightLength(state, action)
+    
+    weights = {
+        'score': (1, state.score), 
+        'straight_length_without_turn': (1, straight_length_without_turn)
+    }
+    
+    for key, weight in weights.iteritems(): 
+        print key, weight[0], weight[1]
+    
+    score = sum([val[0]*va[1] for key, val in weights.iteritems()])
+    return score
 
 class RandomMouse(Agent):
   
