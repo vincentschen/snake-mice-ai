@@ -17,7 +17,7 @@ class GreedyAgent(Agent):
     legalActions = state.getLegalActions(self.agentIndex)
     if len(legalActions) == 0:
       return []
-    scores = [(distanceToClosestMouse(state.generateSuccessor(self.agentIndex, action)), action) \
+    scores = [(-1*distanceToClosestMouse(state.generateSuccessor(self.agentIndex, action)), action) \
         for action in legalActions]
         
     bestScore = max(scores)[0]
@@ -79,8 +79,8 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     
     weights = {
         'score': (0, state.score),
-        'manhattan_distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),
-        'straight_length_without_turn': (0, getStraightLength(state))
+        'manhattan_distance_to_closest_mouse': (0, distanceToClosestMouse(state)),
+        'straight_length_without_turn': (1, getStraightLength(state))
     }
     
     # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
