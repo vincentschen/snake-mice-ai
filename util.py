@@ -3,6 +3,14 @@ from collections import defaultdict
 from collections import deque
 import heapq
 
+def distanceToClosestMouse(state):
+  distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
+  closestIndex = 0
+  for i in range(1, len(distanceToMouse)):
+    if distanceToMouse[i] < distanceToMouse[closestIndex]:
+      closestIndex = i
+  return -1*manhattanDistance(state.micePositions[closestIndex], state.snakePositions[0])
+
 def getStraightLength(state, action):
   #CASE 1: Snake of length 1
   if len(state.snakePositions) == 1: #here any action will result in a straight length of 2

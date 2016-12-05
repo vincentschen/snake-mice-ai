@@ -1,13 +1,13 @@
 # snakeRules
 IS_ORACLE = False
 MOVE_PENALTY = 1
-MICE_TO_WIN = 200
+MICE_TO_WIN = 10
 MOUSE_REWARD_MULTIPLIER = 1
 SNAKE_SPEED = 2
 
 # game
 DEFAULT_DIMENSONS = (20, 20)
-DEFAULT_NUM_MICE = 20
+DEFAULT_NUM_MICE = 2
 DEFAULT_NUM_GAMES = 10
 
 # what do each of these items look like in the graphics? 

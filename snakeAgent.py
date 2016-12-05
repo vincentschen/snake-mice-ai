@@ -90,6 +90,9 @@ class GameState:
 
   def getScore(self):
     return self.score
+    
+  def getNumAgents(self): 
+    return self.numMice + 1
 
   def lost(self):
     return self.isLose
