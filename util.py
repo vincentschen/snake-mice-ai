@@ -88,35 +88,25 @@ def getSnakeCornersHashedByRow(snakePositions):
             pass
     return rowHashed
 
-def getSnakePolygon(snakePositions):
+def getSnakeRectangleArea(snakePositions, dimensions):
     """
-    This function returns a polygon as defined in the shapely library
-    composed of the points defining the perimeter of the snake for the
-    row and col coorindate value ranges that it occupies
+    This function returns a the rectangle area defined by the row and
+    column ranges of the snape positions.
+    """
+    minRow, minCol = dimensions
+    maxRow, maxCol = (0, 0)
+    for pos in snakePositions:
+        posRow, posCol = pos
+        if posRow < minRow:
+            minRow = posRow
+        if posRow > maxRow:
+            maxRow = posRow
+        if posCol < minCol:
+            minCol = posCol
+        if posCol > maxCol:
+            maxCol = posCol
+    return (maxRow - minRow) * (maxCol - minCol)
 
-    Area ($area$) is an instance variable of the polygon
-    """
-    # dict of row values to lists of positions with that row value
-    # sorted by increasing col value
-    snakePositionsByRow = defaultdict(list)
-    for snakeRow, snakeCol in snakePositions:
-        heapq.heappush(snakePositionsByRow[snakeRow], (snakeRow, snakeCol)) 
-    sortedRows = sorted(snakePositionsByRow)
-    topPositions = snakePositionsByRow[sortedRows[0]]
-    rightPositions = []
-    bottomPositions = snakePositionsByRow[sortedRows[-1]]
-    leftPositions = deque()
-    # fill topPositions and bottomPositions in one pass, L to R
-    for row in sortedRows[1:-1]:
-        positionsGivenRow = snakePositionsByRow[row]
-        rightPositions.append(heapq.nlargest(1, positionsGivenRow)[0])
-        # no double counting
-        if len(positionsGivenRow) > 1:
-            leftPositions.appendleft(heapq.nsmallest(1, positionsGivenRow)[0])
-    bottomPositions.reverse()
-    perimeterPositions = topPositions + rightPositions + bottomPositions
-    perimeterPositions.extend(leftPositions)
-    return geometry.Polygon([[p[0], p[1]] for p in perimeterPositions])
 
 def isAValidLocation(pos, snakePositions, dimensions):
     """
