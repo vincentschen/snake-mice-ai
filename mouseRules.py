@@ -5,7 +5,7 @@ Handles state changes for mice agents
 """
 
 def getLegalActions(state, agentIndex):
-    possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    possible_results = [(-1, 0), (1, 0), (0, -1), (0, 1), (0,0)]
     results = []
     agentPos = state.getMicePositions()[agentIndex-1]
     for move in possible_results:

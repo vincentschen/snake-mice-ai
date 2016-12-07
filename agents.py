@@ -91,8 +91,97 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
      
     return score
 
-class RandomMouse(Agent):
-  
+class MinimaxAgent(MultiAgentSearchAgent):
+    
+  def getAction(self, gameState):
+    """
+      Returns the minimax action from the current gameState using self.depth
+      and self.evaluationFunction.
+
+    """
+    
+    def allChoicesSame(list):
+        # Returns boolean indicating whether all elements in the list are the same 
+        return len(set(list)) <= 1
+    
+    n = gameState.getNumAgents()         
+    def recurse(state, index, depth): 
+        # end state
+        if state.won() or state.lost():
+            return (state.getScore(), None)
+            
+        #returns (minimax value of state, optimal action)    
+        if depth == 0:
+            return (self.evaluationFunction(state), None)
+            
+        # Player(s) = Snake
+        if (index == 0):
+            choices = [(recurse(state.generateSuccessor(index, action), index+1, depth)[0], action) \
+                for action in state.getLegalActions(index)] 
+            
+            # posValues = [choice[0] for choice in choices]
+            # if allChoicesSame(posValues):
+            #     return random.choice(choices)
+            # else: 
+            if len(choices) == 0: return (0,[])
+            return max(choices)
+            
+        # Player(s) = Non-last mice
+        if (index > 0 and index < n-1):
+            choices = [(recurse(state.generateSuccessor(index, action), index+1, depth)[0], action) \
+                for action in state.getLegalActions(index)]                
+
+            return min(choices)
+
+        # Player(s) = last mice 
+        if index == n-1:
+            choices = [(recurse(state.generateSuccessor(index, action), 0, depth-1)[0], action) \
+                for action in state.getLegalActions(index)]
+
+            return min(choices)
+    
+    minimax, action = recurse(gameState, self.index, self.depth)
+    return action
+    
+  def evaluationFunction(self, state):        
+    
+    weights = {
+        'score': (1, state.score),
+        'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),
+        'straight_length_without_turn': (0.1, getStraightLength(state))
+        # 'snake_rectangle_area': (-0.5, getSnakeRectangleArea(state.snakePositions, state.dimensions))
+        # 'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+        # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+    }
+    
+    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
+    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
+     
+    return score
+
+
+class MouseAgent(Agent):
+    def __init__( self, index ):
+        self.agentIndex = index
+        
+    def getAction( self, state ):
+        pass
+
+class RandomMouse(MouseAgent):
   def getAction(self, state):
     legalActions = state.getLegalActions(self.agentIndex)
     return random.choice(legalActions)
+    
+class ScaredMouse(MouseAgent):
+    def getAction(self, state):
+        legalActions = state.getLegalActions(self.agentIndex)
+        
+        pos = state.getMicePositions(self.agentIndex)
+        snakeHead = state.snakePositions[0]
+        
+        # Select best actions given the state
+        distancesToSnake = [manhattanDistance( action, snakeHead ) for action in legalActions]
+        bestScore = max( distancesToSnake )
+        bestActions = [action for action, distance in zip( legalActions, distancesToSnake ) if distance == bestScore]
+        
+        return random.choice(bestActions)

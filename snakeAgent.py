@@ -215,14 +215,18 @@ def main(argv):
     # set snakeAgent
     snakeAgent = None
     if options.snakeAgent == "greedy":
-        snakeAgent = agents.GreedyAgent()
+        snakeAgent = agents.GreedyAgent
     elif options.snakeAgent == "expectimax": 
-        if options.depth is not None: snakeAgent = agents.ExpectimaxAgent(options.depth)
-        else: snakeAgent = agents.ExpectimaxAgent()
+        snakeAgent = agents.ExpectimaxAgent
+    elif options.snakeAgent == "minimax":
+        snakeAgent = agents.MinimaxAgent
+        mouseAgent = agents.ScaredMouse
 
-    if options.numGames is not None: runGames(snakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)
-    else: runGames(snakeAgent, mouseAgent, quiet = options.quiet)
-
+    if options.depth is not None: initializedSnakeAgent = snakeAgent(options.depth)
+    else: initializedSnakeAgent = snakeAgent()
+    
+    if options.numGames is not None: runGames(initializedSnakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)
+    else: runGames(initializedSnakeAgent, mouseAgent, quiet = options.quiet)
 
 if __name__ == '__main__':
   main(sys.argv[1:])
