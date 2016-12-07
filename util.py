@@ -3,13 +3,23 @@ from collections import defaultdict
 from collections import deque
 import heapq
 
+def addTuples(tuple1, tuple2):
+    return (tuple1[0]+tuple2[0], tuple1[1]+tuple2[1])
+
 def distanceToClosestMouse(state):
-  distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
-  closestIndex = 0
-  for i in range(1, len(distanceToMouse)):
-    if distanceToMouse[i] < distanceToMouse[closestIndex]:
-      closestIndex = i
-  return manhattanDistance(state.micePositions[closestIndex], state.snakePositions[0])
+    distanceToMouse = [manhattanDistance(i, state.snakePositions[0])**(.5) for i in state.micePositions]
+    closestIndex = 0
+    for i in range(1, len(distanceToMouse)):
+        if distanceToMouse[i] < distanceToMouse[closestIndex]:
+            closestIndex = i
+    return manhattanDistance(state.micePositions[closestIndex], state.snakePositions[0])
+
+def numBlockedAdjacentTiles(state):
+    allToCheck = (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)
+    allToCheck = [addTuples(state.snakePositions[0], action) for action in allToCheck]
+    allToCheck = [pos for pos in allToCheck if pos in state.snakePositions[2:]]
+    return len(allToCheck)
+
 
 def getStraightLength(state):
     #CASE 1: Snake of length 1, 2
