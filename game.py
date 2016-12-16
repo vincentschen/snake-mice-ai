@@ -181,7 +181,8 @@ class Game:
       self.rules.process(self.state, self)
       
           
-def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES, quiet = config.DISPLAY, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
+def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES, 
+    quiet = config.DISPLAY, dimensions = config.DEFAULT_DIMENSONS, numMice = config.DEFAULT_NUM_MICE):
   agents = [snakeAgent] + [mouseAgent(i) for i in range(1, numMice + 1)]
   rules = GameRules()
   games = []
@@ -216,6 +217,9 @@ def main(argv):
     snakeAgent = None
     if options.snakeAgent == "greedy":
         snakeAgent = agents.GreedyAgent
+    elif options.snakeAgent == "oracle":
+        snakeAgent = agents.GreedyAgent
+        config.IS_ORACLE = True 
     elif options.snakeAgent == "expectimax": 
         snakeAgent = agents.ExpectimaxAgent
     elif options.snakeAgent == "minimax":

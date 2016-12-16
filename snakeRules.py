@@ -18,7 +18,7 @@ def getLegalActions(state):
 # even if there's a mouse or snake tile there
 def isValidLocation(state, location):
     if location[0] >= state.dimensions[0] or location[0] < 0 or location[1] >= state.dimensions[1] or location[1] < 0:
-      return False
+      return False  
     if not config.IS_ORACLE:
       for loc in state.getSnakePositions():
         if loc == location:
