@@ -5,7 +5,7 @@ from util import *
 def evaluationFunctionA(state):        
   
   weights = {
-      'score': (1, state.score),    #                                   
+      'score': (20, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
     #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
@@ -23,7 +23,7 @@ def evaluationFunctionA(state):
 def evaluationFunctionB(state):        
   
   weights = {
-      'score': (1, state.score),    #                                   
+    #   'score': (20, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
     #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
@@ -40,7 +40,7 @@ def evaluationFunctionB(state):
   
 def evaluationFunctionC(state):        
   weights = {
-      'score': (1, state.score),    #                                   
+      'score': (20, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
       'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
@@ -157,11 +157,14 @@ class MinimaxAgent(MultiAgentSearchAgent):
             choices = [(recurse(state.generateSuccessor(index, action), index+1, depth)[0], action) \
                 for action in state.getLegalActions(index)] 
             
-            # posValues = [choice[0] for choice in choices]
-            # if allChoicesSame(posValues):
-            #     return random.choice(choices)
+
             # else: 
             if len(choices) == 0: return (0,[])
+            
+            posValues = [choice[0] for choice in choices]
+            if allChoicesSame(posValues):
+                return random.choice(choices)
+            
             return max(choices)
             
         # Player(s) = Non-last mice
@@ -218,7 +221,12 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 choices.append((value, action))
                 
             if len(choices) == 0: return (0,[])
-            else: return max(choices)
+                                
+            posValues = [choice[0] for choice in choices]
+            if allChoicesSame(posValues):    
+                return random.choice(choices)
+            else: 
+                return max(choices)
             
         # Player(s) = Non-last ghost
         if (index > 0 and index < n-1):
