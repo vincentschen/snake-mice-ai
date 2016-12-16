@@ -216,12 +216,9 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 alpha = max(alpha, value)
 
                 choices.append((value, action))
-                                
-            posValues = [choice[0] for choice in choices]
-            if allChoicesSame(posValues):    
-                return random.choice(choices)
-            else: 
-                return max(choices)
+                
+            if len(choices) == 0: return (0,[])
+            else: return max(choices)
             
         # Player(s) = Non-last ghost
         if (index > 0 and index < n-1):
