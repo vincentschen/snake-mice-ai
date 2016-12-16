@@ -204,6 +204,7 @@ def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES,
   return games
 
 def main(argv):
+    print ""
     print argv
     
     parser = OptionParser()
