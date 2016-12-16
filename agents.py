@@ -8,11 +8,11 @@ def evaluationFunctionA(state):
       'score': (20, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
-      'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+    #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+    #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+    #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+    #   'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
   
   # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
@@ -23,14 +23,14 @@ def evaluationFunctionA(state):
 def evaluationFunctionB(state):        
   
   weights = {
-      'score': (20, state.score),    #                                   
+    #   'score': (20, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+    #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+    #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+    #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
       'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
-      'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
   
   # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
@@ -39,8 +39,22 @@ def evaluationFunctionB(state):
   return score
   
 def evaluationFunctionC(state):        
-  return 0
-
+  weights = {
+      'score': (20, state.score),    #                                   
+      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
+      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
+      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+  }
+ 
+  # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
+  score = sum([val[0]*val[1] for key, val in weights.iteritems()])
+   
+  return score
+  
 class MultiAgentSearchAgent(Agent):
   """
   Abstract class that can be extended for agents that use depth for eval fns. 

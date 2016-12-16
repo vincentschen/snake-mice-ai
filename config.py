@@ -8,7 +8,7 @@ SNAKE_SPEED = 2
 # game
 DEFAULT_DIMENSONS = (10, 10)
 DEFAULT_NUM_MICE = 2
-DEFAULT_NUM_GAMES = 10
+DEFAULT_NUM_GAMES = 1
 
 # what do each of these items look like in the graphics? 
 SNAKE_HEAD = "0"

@@ -1,22 +1,25 @@
 # Snake Game with Mice Agent 
 
-## First-time setup 
-1. Install `virtualenv` globally on your system: `pip install virtualenv`
-2. Create a virtual environment for this project: `virtualenv venv`
-3. Install current requirements locally in the virtual environment: `pip install -r requirements.txt`
-
-## During work sesh
-1. Activate the virtual environment so that you have access to the locally installed requirements: `source venv/bin/activate`
-2. When you're done, deactivate the virtual environment with: `deactivate`
-
-If you encounter a runtime error, it's probably because someone installed a new requirement and you don't have it locally. So update your virtual environment with: `pip install -r requirements.txt` 
-
-## If you change requirements...  
-1. Install new requirement using pip: `pip install <new_library>`
-2. Save them so that we have access: `pip freeze > requirements.txt`
-
 ## Run 
 Pass in the snake agent with `-s` and the number of trials with `-n`. For quiet mode (or no graphics), use `-q`.
 
 For example: `python game.py -s greedy -n 10 -q`
 This will run the Greedy snake agent 10 times, with no graphics. 
+
+## Options 
+- `-s` or `--snake` (*required*)
+  - ['greedy', 'oracle', 'expectimax', 'minimax', 'alphabeta']
+- `-n` or `--numGames` (*optional*)
+  - Defaults to `numGames = 1`.  
+  - [int >= 1]
+  - Indicates number of games that should be run to sample over. 
+- `-q` or `--quiet` (*optional*)
+  - Defaults to `quiet = False`.
+  - Flag that indicates whether graphics will be shown.  
+- `-d` or `--depth` (*required* for snake = *expectimax* or *minimax* or *alphabeta*)
+  - Defaults to `depth = 2`.
+  - Indicates depth of search recursion. 
+  - [int >= 1]
+- `-e` or `--evalFn` (*required* for snake = *expectimax* or *minimax* or *alphabeta*)
+  - Indicates which evaluation function is chosen. 
+  - ['a', 'b', 'c']

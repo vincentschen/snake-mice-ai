@@ -219,11 +219,11 @@ def main(argv):
     
     # set evaluation funciton 
     evalFn = agents.evaluationFunctionA #default 
-    if options.evalFn.lower() == 'a':
+    if options.evalFn == 'a':
         evalFn = agents.evaluationFunctionA
-    elif options.evalFn.lower() == 'b':
+    elif options.evalFn == 'b':
         evalFn = agents.evaluationFunctionB
-    elif options.evalFn.lower() == 'c':
+    elif options.evalFn == 'c':
         evalFn = agents.evaluationFunctionC
     
     # set snakeAgent
@@ -242,7 +242,7 @@ def main(argv):
         snakeAgent = agents.AlphaBetaAgent
         mouseAgent = agents.ScaredMouse
 
-    if options.depth is not None and options.evalFn is not None: initializedSnakeAgent = snakeAgent(evalFn, options.depth)
+    if options.depth is not None or options.evalFn is not None: initializedSnakeAgent = snakeAgent(evalFn, options.depth)
     else: initializedSnakeAgent = snakeAgent()
     
     if options.numGames is not None: runGames(initializedSnakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)
