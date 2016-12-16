@@ -6,7 +6,6 @@ from copy import deepcopy
 import snakeRules, mouseRules
 import agents
 import config
-import evaluationFunctions
 import datetime
 
 class GameRules: 
