@@ -6,6 +6,7 @@ from copy import deepcopy
 import snakeRules, mouseRules
 import agents
 import config
+import evaluationFunctions
 
 class GameRules: 
   """
@@ -203,15 +204,27 @@ def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES,
   return games
 
 def main(argv):
+    print argv
+    
     parser = OptionParser()
     parser.add_option("-s", "--snake", action="store", type="string", dest="snakeAgent")
     parser.add_option("-n", "--numGames", action="store", type="int", dest="numGames")
     parser.add_option("-q", "--quiet", action="store_true", dest="quiet")
     parser.add_option("-d", "--depth", action="store", type="int", dest="depth")
+    parser.add_option("-e", "--evalFn", action="store", type="string", dest="evalFn")
 
     (options, args) = parser.parse_args(argv)
     
     mouseAgent = agents.RandomMouse
+    
+    # set evaluation funciton 
+    evalFn = agents.evaluationFunctionA #default 
+    if options.evalFn.lower() == 'a':
+        evalFn = agents.evaluationFunctionA
+    elif options.evalFn.lower() == 'b':
+        evalFn = agents.evaluationFunctionB
+    elif options.evalFn.lower() == 'c':
+        evalFn = agents.evaluationFunctionC
     
     # set snakeAgent
     snakeAgent = None
@@ -229,7 +242,7 @@ def main(argv):
         snakeAgent = agents.AlphaBetaAgent
         mouseAgent = agents.ScaredMouse
 
-    if options.depth is not None: initializedSnakeAgent = snakeAgent(options.depth)
+    if options.depth is not None and options.evalFn is not None: initializedSnakeAgent = snakeAgent(evalFn, options.depth)
     else: initializedSnakeAgent = snakeAgent()
     
     if options.numGames is not None: runGames(initializedSnakeAgent, mouseAgent, numGames = options.numGames, quiet = options.quiet)

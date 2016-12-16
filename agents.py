@@ -1,33 +1,55 @@
 import random
 from snakeAgent import Agent
-from util import * 
+from util import *
+
+def evaluationFunctionA(state):        
+  
+  weights = {
+      'score': (20, state.score),    #                                   
+      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
+      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
+      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+      'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+  }
+  
+  # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
+  score = sum([val[0]*val[1] for key, val in weights.iteritems()])
+   
+  return score
+
+def evaluationFunctionB(state):        
+  
+  weights = {
+      'score': (20, state.score),    #                                   
+      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
+      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
+      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+      'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+  }
+  
+  # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
+  score = sum([val[0]*val[1] for key, val in weights.iteritems()])
+   
+  return score
+  
+def evaluationFunctionC(state):        
+  return 0
 
 class MultiAgentSearchAgent(Agent):
   """
   Abstract class that can be extended for agents that use depth for eval fns. 
   """
 
-  def __init__(self, depth = '2'):
+  def __init__(self, evalFn, depth = '2'):
     self.index = 0 # Snake is always agent index 0
+    self.evaluationFunction = evalFn
     self.depth = int(depth)
-    
-  def evaluationFunction(self, state):        
-    
-    weights = {
-        'score': (20, state.score),    #                                   
-        'distance_to_closest_mouse': (-6, distanceToClosestMouse(state)),                             # range
-        'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-        'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-        'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-        'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-        'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten)
-        # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
-    }
-    
-    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
-    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
-     
-    return score
 
 class GreedyAgent(Agent):
 
@@ -226,8 +248,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     minimax, action = recurse(gameState, self.index, self.depth, alpha, beta)
     # print minimax, action
     return action
-
-
 
 class MouseAgent(Agent):
     def __init__( self, index ):
