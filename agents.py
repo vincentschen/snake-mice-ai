@@ -5,9 +5,9 @@ from util import *
 def evaluationFunctionA(state):        
   
   weights = {
-      'score': (20, state.score),    #                                   
+      'score': (1, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
-      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
+      'straight_length_without_turn': (.1, getStraightLength(state)),                                # range 0 -> max(width, length)
     #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
     #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
     #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
@@ -23,13 +23,13 @@ def evaluationFunctionA(state):
 def evaluationFunctionB(state):        
   
   weights = {
-    #   'score': (20, state.score),    #                                   
-      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
-      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-    #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+      'score': (1, state.score),    #                                   
+      'distance_to_closest_mouse': (-10, distanceToClosestMouse(state)),                             # range
+      'straight_length_without_turn': (.1, getStraightLength(state)),                                # range 0 -> max(width, length)
+    #  'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
     #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
     #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+        'num_blocked_adjacent_tiles': (-1, numBlockedAdjacentTiles(state)*state.miceEaten),
     #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
   
@@ -40,13 +40,13 @@ def evaluationFunctionB(state):
   
 def evaluationFunctionC(state):        
   weights = {
-      'score': (20, state.score),    #                                   
-      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
-      'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-      'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-      'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-      'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-      'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
+      'score': (1, state.score),    #                                   
+      'distance_to_closest_mouse': (-10, distanceToClosestMouse(state)),                             # range
+      'straight_length_without_turn': (.1, getStraightLength(state)),                                # range 0 -> max(width, length)
+      'legal_action_count': (5, len(state.getLegalActions())),                                        # range 0 -> 3
+      'snake_rectangle_area': (1, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+      'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+      'num_blocked_adjacent_tiles': (-1, numBlockedAdjacentTiles(state)*state.miceEaten),
     #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
  
