@@ -5,7 +5,7 @@ from util import *
 def evaluationFunctionA(state):        
   
   weights = {
-      'score': (20, state.score),    #                                   
+      'score': (1, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
     #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
@@ -23,7 +23,7 @@ def evaluationFunctionA(state):
 def evaluationFunctionB(state):        
   
   weights = {
-    #   'score': (20, state.score),    #                                   
+      'score': (1, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
     #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
@@ -40,7 +40,7 @@ def evaluationFunctionB(state):
   
 def evaluationFunctionC(state):        
   weights = {
-      'score': (20, state.score),    #                                   
+      'score': (1, state.score),    #                                   
       'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
       'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
       'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
