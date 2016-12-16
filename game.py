@@ -225,6 +225,9 @@ def main(argv):
     elif options.snakeAgent == "minimax":
         snakeAgent = agents.MinimaxAgent
         mouseAgent = agents.ScaredMouse
+    elif options.snakeAgent == "alphabeta": 
+        snakeAgent = agents.AlphaBetaAgent
+        mouseAgent = agents.ScaredMouse
 
     if options.depth is not None: initializedSnakeAgent = snakeAgent(options.depth)
     else: initializedSnakeAgent = snakeAgent()

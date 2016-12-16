@@ -10,6 +10,24 @@ class MultiAgentSearchAgent(Agent):
   def __init__(self, depth = '2'):
     self.index = 0 # Snake is always agent index 0
     self.depth = int(depth)
+    
+  def evaluationFunction(self, state):        
+    
+    weights = {
+        'score': (20, state.score),    #                                   
+        'distance_to_closest_mouse': (-6, distanceToClosestMouse(state)),                             # range
+        'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
+        'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
+        'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
+        'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+        'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten)
+        # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+    }
+    
+    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
+    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
+     
+    return score
 
 class GreedyAgent(Agent):
 
@@ -75,24 +93,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     expectimax, action = recurse(gameState, self.index, self.depth)
     return action
 
-  def evaluationFunction(self, state):        
-    
-    weights = {
-        'score': (20, state.score),    #                                   
-        'distance_to_closest_mouse': (-6, distanceToClosestMouse(state)),                             # range
-        'straight_length_without_turn': (1, getStraightLength(state)),                                # range 0 -> max(width, length)
-        'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-        'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-        'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-        'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten)
-        # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
-    }
-    
-    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
-    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
-     
-    return score
-
 class MinimaxAgent(MultiAgentSearchAgent):
     
   def getAction(self, gameState):
@@ -145,21 +145,88 @@ class MinimaxAgent(MultiAgentSearchAgent):
     minimax, action = recurse(gameState, self.index, self.depth)
     return action
     
-  def evaluationFunction(self, state):        
+class AlphaBetaAgent(MultiAgentSearchAgent):
+  """
+    Your minimax agent with alpha-beta pruning (problem 2)
+  """
+
+  def getAction(self, gameState):
+    """
+      Returns the minimax action using self.depth and self.evaluationFunction
+    """
+
+    # BEGIN_YOUR_CODE (our solution is 49 lines of code, but don't worry if you deviate from this)
+    def allChoicesSame(list):
+        # Returns boolean indicating whether all elements in the list are the same 
+        return len(set(list)) <= 1
     
-    weights = {
-        'score': (1, state.score),
-        'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),
-        'straight_length_without_turn': (0.1, getStraightLength(state))
-        # 'snake_rectangle_area': (-0.5, getSnakeRectangleArea(state.snakePositions, state.dimensions))
-        # 'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-        # 'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
-    }
+    n = gameState.getNumAgents()    
+    def recurse(state, index, depth, alpha, beta): 
+        #returns (minimax value of state, optimal action)    
+                
+        # end state
+        if state.won() or state.lost():
+            return (state.getScore(), None) 
+        
+        if depth == 0:
+            return (self.evaluationFunction(state), None)
+
+        # Player(s) = Agent
+        if (index == 0):
+            choices = []
+            for action in state.getLegalActions(index): 
+                value = recurse(state.generateSuccessor(index, action), index+1, depth, alpha, beta)[0]
+                # reset lower bound
+                alpha = max(alpha, value)
+
+                choices.append((value, action))
+                                
+            posValues = [choice[0] for choice in choices]
+            if allChoicesSame(posValues):    
+                return random.choice(choices)
+            else: 
+                return max(choices)
+            
+        # Player(s) = Non-last ghost
+        if (index > 0 and index < n-1):
+            choices = []
+            for action in state.getLegalActions(index): 
+                value = recurse(state.generateSuccessor(index, action), index+1, depth, alpha, beta)[0]
+                
+                # reset upper bound
+                beta = min(beta, value)
+                
+                # not overlapping 
+                if not (beta > alpha):
+                    return (beta, action) 
+                    
+                choices.append((value, action))
+
+            return min(choices)
+        
+        # Player(s) = last ghost 
+        if index == n-1:
+            choices = []
+            for action in state.getLegalActions(index): 
+                value = recurse(state.generateSuccessor(index, action), 0, depth-1, alpha, beta)[0]
+                
+                # reset upper bound
+                beta = min(beta, value)
+                
+                # not overlapping 
+                if not (beta > alpha):
+                    return (beta, action) 
+                    
+                choices.append((value, action))
+
+            return min(choices)
     
-    # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
-    score = sum([val[0]*val[1] for key, val in weights.iteritems()])
-     
-    return score
+    alpha = -float("inf")
+    beta = float("inf")     
+    minimax, action = recurse(gameState, self.index, self.depth, alpha, beta)
+    # print minimax, action
+    return action
+
 
 
 class MouseAgent(Agent):
