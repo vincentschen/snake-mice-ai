@@ -7,6 +7,7 @@ import snakeRules, mouseRules
 import agents
 import config
 import evaluationFunctions
+import datetime
 
 class GameRules: 
   """
@@ -215,6 +216,7 @@ def main(argv):
 
     (options, args) = parser.parse_args(argv)
     
+    # defaults to random mouse 
     mouseAgent = agents.RandomMouse
     
     # set evaluation funciton 
@@ -249,4 +251,8 @@ def main(argv):
     else: runGames(initializedSnakeAgent, mouseAgent, quiet = options.quiet)
 
 if __name__ == '__main__':
+  start = datetime.datetime.now()
   main(sys.argv[1:])
+  end = datetime.datetime.now()
+  elapsed = end - start 
+  print "Time: ", elapsed.total_seconds(), " seconds"
