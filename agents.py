@@ -1,5 +1,5 @@
 import random
-from snakeAgent import Agent
+from game import Agent
 from util import *
 
 def evaluationFunctionA(state):        

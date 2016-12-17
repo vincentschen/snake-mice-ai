@@ -204,9 +204,6 @@ def runGames (snakeAgent, mouseAgent, numGames = config.DEFAULT_NUM_GAMES,
   return games
 
 def main(argv):
-    print ""
-    print argv
-    
     parser = OptionParser()
     parser.add_option("-s", "--snake", action="store", type="string", dest="snakeAgent")
     parser.add_option("-n", "--numGames", action="store", type="int", dest="numGames")
