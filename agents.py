@@ -6,13 +6,8 @@ def evaluationFunctionA(state):
   
   weights = {
       'score': (1, state.score),    #                                   
-      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                             # range
-      'straight_length_without_turn': (.1, getStraightLength(state)),                                # range 0 -> max(width, length)
-    #   'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-    #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-    #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
-    #   'num_blocked_adjacent_tiles': (-1, 10*numBlockedAdjacentTiles(state)*state.miceEaten),
-    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
+      'distance_to_closest_mouse': (-1, distanceToClosestMouse(state)),                            
+      'straight_length_without_turn': (.1, getStraightLength(state)), 
   }
   
   # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
@@ -24,13 +19,9 @@ def evaluationFunctionB(state):
   
   weights = {
       'score': (1, state.score),    #                                   
-      'distance_to_closest_mouse': (-10, distanceToClosestMouse(state)),                             # range
-      'straight_length_without_turn': (.1, getStraightLength(state)),                                # range 0 -> max(width, length)
-    #  'legal_action_count': (20, len(state.getLegalActions()) > 1),                                        # range 0 -> 3
-    #   'snake_rectangle_area': (3, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
-    #   'area_blocked_by_snake': (-10, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
+      'distance_to_closest_mouse': (-10, distanceToClosestMouse(state)), 
+      'straight_length_without_turn': (.1, getStraightLength(state)), 
         'num_blocked_adjacent_tiles': (-1, numBlockedAdjacentTiles(state)*state.miceEaten),
-    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
   
   # for key, weight in weights.iteritems(): print key, weight[0], weight[1]
@@ -47,7 +38,6 @@ def evaluationFunctionC(state):
       'snake_rectangle_area': (1, getSnakeRectangleArea(state.snakePositions, state.dimensions)),    # range 0 -> width * length
       'area_blocked_by_snake': (-1, getAreaBlockedBySnake(state.snakePositions, state.dimensions)),
       'num_blocked_adjacent_tiles': (-1, numBlockedAdjacentTiles(state)*state.miceEaten),
-    #   'corners_in_snake': (-1, getNumSnakeCorners(state.snakePositions))
   }
  
   # for key, weight in weights.iteritems(): print key, weight[0], weight[1]

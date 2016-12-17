@@ -1,7 +1,7 @@
 # Snake Game with Mice Agent 
 
 ## Run 
-Pass in the snake agent with `-s` and the number of trials with `-n`. For quiet mode (or no graphics), use `-q`.
+Run the game with `python game.py`, and pass in options (see below) using the command line. 
 
 For example: `python game.py -s greedy -n 10 -q`
 This will run the Greedy snake agent 10 times, with no graphics. 

@@ -35,8 +35,10 @@ def getStraightLength(state):
 def manhattanDistance( xy1, xy2 ):
   return abs( xy1[0] - xy2[0] ) + abs( xy1[1] - xy2[1] )  
 
-# k-norm TODO: not working
 def centroid(points):
+    """ 
+    Computes the centroid for all the mice on the board. 
+    """
     x_sum = 0.0
     y_sum = 0.0
     for x_i, y_i in points:
@@ -47,56 +49,9 @@ def centroid(points):
 def distance(p1, p2):
     return ((p1[0] - p2[0]) ** 2 + (p1[0] - p2[1]) ** 2) ** 0.5
 
-def k_heuristic(head, points):
-    """
-    Let Head be the point represented by $head
-    Let N be the number of points in $points
-    Let C be the set C[1], C[1,2], C[1,2,3], ..., C[1,2,3,...,N] where C_i is the centroid composed of the ith closest points to Head
-    Returns the Nth root of the summation of distances from Head to all C_i raised to the ith power 
-    """
-    # TODO: MAKE THIS BROKEN HEURISTIC WORK
-    centroids = [centroid(points[i:]) for i in range(len(points))]
-    distances_to_centroids = sorted([distance(head, point) for point in centroids])
-    summation = sum([distances_to_centroids[len(points) - 1 - i] ** (i + 1) for i in range(len(points) - 1, -1, -1)])
-    norm = summation ** (1.0 / len(points))
-    return norm
-
-def k_norm(head, points):
-    """
-    Let N be the number of points in $points
-    Returns the K-Norm of distances from head to points where the greatest distance is raised to the Nth power
-    """
-    distances_to_points = sorted([distance(head, point) for point in points])
-    summation = sum([distances_to_points[i] ** (i + 1) for i in range(len(points))]) 
-    norm = summation ** (1.0 / len(points))
-    return norm 
-
-# TODO: Use this function for some heuristic?
-def getSnakeCornersHashedByRow(snakePositions):
-    """
-    This function returns a dictionary mapping row values to 
-    lists of corner coordinates (snake positions) in a heapq configuration
-    for which this value is the row
-    """
-    rowHashed = defaultdict(list)
-    heapq.heappush(rowHashed[snakePositions[0][0]], snakePositions[0]) 
-    heapq.heappush(rowHashed[snakePositions[-1][0]], snakePositions[-1]) 
-    for i in range(len(snakePositions)):
-        snakeX1, snakeY1 = snakePositions[i]
-        try:
-            snakeX2, snakeY2 = snakePositions[i + 2]
-            xDiff = snakeX1 - snakeX2
-            yDiff = snakeY1 - snakeY2
-            if (xDiff == 1 or xDiff == -1) and (yDiff == 1 or yDiff == -1):
-                corner = snakePositions[i + 1]
-                heapq.heappush(rowHashed[corner[0]], corner)
-        except IndexError:
-            pass
-    return rowHashed
-
 def getNumSnakeCorners(snakePositions):
-    """
-    Changed copy of the above
+    """ 
+    Computes the number of 'corners' formed by turns in the Snake. 
     """
     count = 2
     for i in range(len(snakePositions)):
